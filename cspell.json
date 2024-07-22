@@ -1,0 +1,16 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+        "cspell.json",
+        ".git/**",
+        ".gitignore",
+        ".github/workflows/*",
+        "requirements.txt",
+        "data/*"
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [],
+    "ignoreWords": [],
+    "import": []
+}
