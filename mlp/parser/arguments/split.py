@@ -38,6 +38,12 @@ def create_split_subparser(subparsers) -> None:
         '--test-size',
         type=float,
         action=SizeAction,
-        default=0.2,
+        default=0.1,
         help='Size of the test set'
+    )
+
+    parser_split.add_argument(
+        '--out-dir',
+        default='./data',
+        help='Output directory.'
     )
