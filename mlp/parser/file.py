@@ -32,3 +32,30 @@ def read_dataset(path: str) -> pd.DataFrame:
     except pd.errors.ParserError:
         logging.error('The file `%s` could not be parsed.', path)
         sys.exit(1)
+
+    # pylint: disable=broad-except
+    except Exception as e:
+        logging.error('Could not read the file `%s`: %s', path, e)
+        sys.exit(1)
+
+
+def save_dataset(dataset: pd.DataFrame, path: str) -> None:
+    """
+    Saves the dataset to a CSV file.
+
+    Args:
+        dataset: The dataset to save.
+        path: The path to the CSV file.
+    """
+
+    try:
+        dataset.to_csv(path, index=False, header=False)
+
+    except (PermissionError, IsADirectoryError) as e:
+        logging.error('Could not write the file `%s`: %s', path, e)
+        sys.exit(1)
+
+    # pylint: disable=broad-except
+    except Exception as e:
+        logging.error('Could not write the file `%s`: %s', path, e)
+        sys.exit(1)
