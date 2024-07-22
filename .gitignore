@@ -1,5 +1,9 @@
 ### Python ###
 
+# Project specific
+data/*
+!data/data.csv
+
 # VS Code settings
 .vscode/
 
