@@ -7,7 +7,7 @@ import numpy as np
 from .activation import Activation
 
 
-class Sigmoid(Activation):
+class SigmoidActivation(Activation):
     """
     Sigmoid activation function.
     """

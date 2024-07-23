@@ -7,7 +7,7 @@ import numpy as np
 from .activation import Activation
 
 
-class Softmax(Activation):
+class SoftmaxActivation(Activation):
     """
     Softmax activation function.
     """
