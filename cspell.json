@@ -10,7 +10,11 @@
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": [],
+    "words": [
+        "ndarray",
+        "keepdims",
+        "softmax"
+    ],
     "ignoreWords": [],
     "import": []
 }
