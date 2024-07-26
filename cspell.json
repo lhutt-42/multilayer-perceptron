@@ -16,6 +16,7 @@
         "select_dtypes",
         "randn",
         "softmax",
+        "relu",
         "binarize",
         "binarizes"
     ],

@@ -40,8 +40,8 @@ class MiniBatchModel(Model):
         self.loss = loss
         self._initialize_layers(x.shape[1])
 
-        batch_zip = zip(cycle(x), cycle(y))
-        batch_cycle = batched(cycle(batch_zip), batch_size)
+        batch_zip = cycle(zip(x, y))
+        batch_cycle = batched(batch_zip, batch_size)
 
         for (epoch, batch) in zip(range(epochs), batch_cycle):
             x_batch, y_batch = zip(*batch)
