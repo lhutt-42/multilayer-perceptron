@@ -8,6 +8,7 @@ from typing import List
 
 from mlp.parser.file import read_dataset
 from mlp.model.preprocessing import binarize, normalize
+from mlp.model.losses import Loss
 
 
 # pylint: disable=too-many-arguments, unused-argument
@@ -17,7 +18,7 @@ def train_model(
     epochs: int,
     batch_size: int,
     learning_rate: float,
-    loss: str,
+    loss: Loss,
     out_dir: str
 ) -> None:
     """

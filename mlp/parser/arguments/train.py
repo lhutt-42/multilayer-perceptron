@@ -4,6 +4,8 @@ This module contains the train subparser.
 
 import argparse
 
+from mlp.model.losses import BinaryCrossEntropyLoss
+
 
 class LayersAction(argparse.Action):
     """
@@ -25,6 +27,19 @@ class PositiveAction(argparse.Action):
         if values <= 0:
             raise argparse.ArgumentError(self, f'The {self.dest} must be strictly positive.')
         setattr(namespace, self.dest, values)
+
+
+LOSS_FUNCTIONS = {
+    'bce': BinaryCrossEntropyLoss
+}
+
+class LossAction(argparse.Action):
+    """
+    Custom action to convert the loss argument to the corresponding class.
+    """
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, LOSS_FUNCTIONS[values])
 
 
 def create_train_subparser(subparsers) -> None:
@@ -81,8 +96,9 @@ def create_train_subparser(subparsers) -> None:
     parser_train.add_argument(
         '--loss',
         type=str,
-        choices=['bce'],
-        default='bce',
+        choices=LOSS_FUNCTIONS.keys(),
+        action=LossAction,
+        default=BinaryCrossEntropyLoss,
         help='The loss function to use.'
     )
 
