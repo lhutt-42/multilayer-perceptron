@@ -13,7 +13,10 @@
     "words": [
         "ndarray",
         "keepdims",
-        "softmax"
+        "select_dtypes",
+        "softmax",
+        "binarize",
+        "binarizes"
     ],
     "ignoreWords": [],
     "import": []

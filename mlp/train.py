@@ -2,9 +2,12 @@
 This module contains the training logic for the model.
 """
 
+import sys
+import logging
 from typing import List
 
 from mlp.parser.file import read_dataset
+from mlp.model.preprocessing import binarize, normalize
 
 
 # pylint: disable=too-many-arguments, unused-argument
@@ -30,4 +33,16 @@ def train_model(
         out_dir (str): The output directory.
     """
 
-    _ = read_dataset(dataset_path)
+    df = read_dataset(dataset_path)
+
+    if df.empty or len(df.columns) < 3:
+        logging.error('The dataset does not match the excepted format.')
+        sys.exit(1)
+
+    # Drops the index column
+    df = df.drop(columns=df.columns[0])
+
+    x = normalize(df)
+    y = binarize(df[df.columns[0]])
+
+    print(x, y)
