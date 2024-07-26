@@ -6,18 +6,18 @@ import sys
 import logging
 from typing import List, Type
 
-from mlp.parser.file import read_dataset
+from .parser.file import read_dataset
 
-from mlp.model.models import MiniBatchModel
-from mlp.model.preprocessing import binarize, normalize
-from mlp.model.losses import Loss
-from mlp.model.layers import DenseLayer
-from mlp.model.activations import SigmoidActivation, SoftmaxActivation
-from mlp.model.optimizers import GradientDescentOptimizer
+from .model.models import MiniBatchModel
+from .model.preprocessing import binarize, normalize
+from .model.losses import Loss
+from .model.layers import DenseLayer
+from .model.activations import SigmoidActivation, SoftmaxActivation
+from .model.optimizers import GradientDescentOptimizer
 
 
 # pylint: disable=too-many-arguments, unused-argument
-def train_model(
+def train(
     dataset_path: str,
     layers: List[int],
     epochs: int,

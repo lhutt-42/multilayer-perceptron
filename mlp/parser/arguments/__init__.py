@@ -1,12 +1,12 @@
 """
-This module contains the main parser.
+This module contains parsing related to arguments.
 """
 
 import argparse
 
-from mlp.parser.arguments.split import create_split_subparser
-from mlp.parser.arguments.train import create_train_subparser
-from mlp.parser.arguments.predict import create_predict_subparser
+from .split import create_split_subparser
+from .train import create_train_subparser
+from .predict import create_predict_subparser
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -28,3 +28,8 @@ def create_parser() -> argparse.ArgumentParser:
     create_predict_subparser(subparsers)
 
     return parser
+
+
+__all__ = [
+    'create_parser'
+]

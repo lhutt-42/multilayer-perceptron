@@ -4,9 +4,9 @@ Main script of the project.
 
 import logging
 
-from mlp.parser.arguments import create_parser
-from mlp.split import split_dataset
-from mlp.train import train_model
+from mlp.parser import create_parser
+from mlp import split
+from mlp import train
 
 
 def main() -> None:
@@ -21,13 +21,13 @@ def main() -> None:
 
     match args.command:
         case 'split':
-            split_dataset(
+            split(
                 args.dataset,
                 args.test_size,
                 args.out_dir
             )
         case 'train':
-            train_model(
+            train(
                 args.dataset,
                 args.layers,
                 args.epochs,
