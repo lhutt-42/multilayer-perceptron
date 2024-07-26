@@ -38,4 +38,5 @@ class SoftmaxActivation(Activation):
             np.ndarray: The output.
         """
 
-        return self(x) * (1 - self(x))
+        s = self(x)
+        return s * (1 - s)

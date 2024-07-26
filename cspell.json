@@ -18,7 +18,8 @@
         "softmax",
         "relu",
         "binarize",
-        "binarizes"
+        "binarizes",
+        "regularizers"
     ],
     "ignoreWords": [],
     "import": []

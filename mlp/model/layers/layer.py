@@ -2,13 +2,16 @@
 Layer interface.
 """
 
+from typing import Optional
+
 import numpy as np
 
 from . import (
     Activation,
     Optimizer,
     Initializer,
-    ZeroInitializer
+    ZeroInitializer,
+    Regularizer
 )
 
 
@@ -26,12 +29,15 @@ class Layer:
         optimizer: Optimizer,
         weight_initializer: Initializer = ZeroInitializer(),
         bias_initializer: Initializer = ZeroInitializer(),
+        regularizer: Optional[Regularizer] = None,
     ) -> None:
         self.layer_size: int = layer_size
         self.activation: Activation = activation
         self.optimizer: Optimizer = optimizer
+
         self.weight_initializer: Initializer = weight_initializer
         self.bias_initializer: Initializer = bias_initializer
+        self.regularizer: Optional[Regularizer] = regularizer
 
         self.weights: np.ndarray | None = None
         self.biases: np.ndarray | None = None

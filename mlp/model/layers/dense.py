@@ -39,6 +39,9 @@ class DenseLayer(Layer):
         weights_gradient = np.dot(self.input.T, gradient)
         biases_gradient = np.sum(gradient, axis=0, keepdims=True)
 
+        if self.regularizer is not None:
+            weights_gradient += self.regularizer.gradient(self.weights)
+
         self.optimizer.update(
             self.weights,
             self.biases,

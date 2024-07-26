@@ -8,13 +8,15 @@ from typing import List, Type
 
 from .parser.file import read_dataset
 
-from .model.models import MiniBatchModel
+# pylint: disable=unused-import
+from .model.models import MiniBatchModel, BatchModel
 from .model.preprocessing import binarize, normalize
 from .model.losses import Loss
 from .model.layers import DenseLayer
-from .model.activations import SigmoidActivation, SoftmaxActivation
+from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
 from .model.optimizers import GradientDescentOptimizer
-
+from .model.initializers import RandomInitializer, ZeroInitializer
+from .model.regularizers import L1Regularizer, L2Regularizer
 
 # pylint: disable=too-many-arguments, unused-argument
 def train(
@@ -54,18 +56,24 @@ def train(
     _, input_shape = x.shape
     _, output_shape = y.shape
 
-    model = MiniBatchModel()
+    model = BatchModel()
 
     model.add([
         DenseLayer(
             input_shape,
             SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate)
+            GradientDescentOptimizer(learning_rate),
+            weight_initializer=RandomInitializer(),
+            bias_initializer=RandomInitializer(),
+            regularizer=L1Regularizer()
         ),
         DenseLayer(
             output_shape,
             SoftmaxActivation(),
-            GradientDescentOptimizer(learning_rate)
+            GradientDescentOptimizer(learning_rate),
+            weight_initializer=RandomInitializer(),
+            bias_initializer=RandomInitializer(),
+            regularizer=L1Regularizer()
         )
     ])
 

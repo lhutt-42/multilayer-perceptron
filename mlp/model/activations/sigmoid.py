@@ -23,7 +23,8 @@ class SigmoidActivation(Activation):
             np.ndarray: The output.
         """
 
-        return 1 / (1 + np.exp(-x))
+        x_clipped = np.clip(x, -500, 500)
+        return 1 / (1 + np.exp(-x_clipped))
 
 
     def gradient(self, x: np.ndarray) -> np.ndarray:
@@ -37,4 +38,5 @@ class SigmoidActivation(Activation):
             np.ndarray: The output.
         """
 
-        return self(x) * (1 - self(x))
+        s = self(x)
+        return s * (1 - s)
