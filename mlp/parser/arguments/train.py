@@ -73,7 +73,7 @@ def create_train_subparser(subparsers) -> None:
         '--epochs',
         type=int,
         action=PositiveAction,
-        default=100,
+        default=100_000,
         help='The number of epochs to train the model.'
     )
 
@@ -89,7 +89,7 @@ def create_train_subparser(subparsers) -> None:
         '--learning-rate',
         type=float,
         action=PositiveAction,
-        default=0.001,
+        default=1e-4,
         help='The learning rate of the optimizer.'
     )
 
