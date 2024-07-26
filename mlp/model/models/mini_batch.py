@@ -2,7 +2,7 @@
 Model class with mini-batch training.
 """
 
-from itertools import islice, cycle, batched
+from itertools import cycle, batched
 
 import numpy as np
 
@@ -43,7 +43,7 @@ class MiniBatchModel(Model):
         batch_zip = zip(cycle(x), cycle(y))
         batch_cycle = batched(cycle(batch_zip), batch_size)
 
-        for (epoch, batch) in zip(range(epochs), islice(batch_cycle, epochs)):
+        for (epoch, batch) in zip(range(epochs), batch_cycle):
             x_batch, y_batch = zip(*batch)
 
             x_batch = np.array(x_batch)
