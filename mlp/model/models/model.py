@@ -2,6 +2,7 @@
 Model class.
 """
 
+import logging
 from typing import List
 
 import numpy as np
@@ -53,6 +54,18 @@ class Model:
                 layer.initialize(self.input_size)
             else:
                 layer.initialize(self.layers[i - 1].layer_size)
+
+
+    def _log_epoch_loss(self, epoch: int, loss_value: float) -> None:
+        """
+        Displays the epoch and loss value.
+
+        Args:
+            epoch (int): The epoch.
+            loss_value (float): The loss value.
+        """
+
+        logging.info('Epoch %5s, Loss: %.4f', epoch, loss_value)
 
 
     def forward(self, x: np.ndarray) -> np.ndarray:

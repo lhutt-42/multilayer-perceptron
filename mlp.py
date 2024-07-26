@@ -2,14 +2,19 @@
 Main script of the project.
 """
 
+import logging
+
 from mlp.parser.arguments import create_parser
 from mlp.split import split_dataset
 from mlp.train import train_model
 
-def main():
+
+def main() -> None:
     """
     Main function of the script.
     """
+
+    logging.basicConfig(level=logging.DEBUG)
 
     parser = create_parser()
     args = parser.parse_args()

@@ -8,7 +8,7 @@ from typing import List, Type
 
 from mlp.parser.file import read_dataset
 
-from mlp.model.models import BatchModel
+from mlp.model.models import MiniBatchModel
 from mlp.model.preprocessing import binarize, normalize
 from mlp.model.losses import Loss
 from mlp.model.layers import DenseLayer
@@ -54,16 +54,11 @@ def train_model(
     _, input_shape = x.shape
     _, output_shape = y.shape
 
-    model = BatchModel()
+    model = MiniBatchModel()
 
     model.add([
         DenseLayer(
             input_shape,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate)
-        ),
-        DenseLayer(
-            24,
             SigmoidActivation(),
             GradientDescentOptimizer(learning_rate)
         ),

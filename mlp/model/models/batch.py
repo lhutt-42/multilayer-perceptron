@@ -42,4 +42,4 @@ class BatchModel(Model):
 
             if epoch % 1000 == 0:
                 loss_value = self.loss.forward(y, output)
-                print(f'Epoch {epoch}, Loss: {loss_value}')
+                self._log_epoch_loss(epoch, loss_value)

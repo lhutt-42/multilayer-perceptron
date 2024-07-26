@@ -53,6 +53,5 @@ class MiniBatchModel(Model):
             self.backward(output, y_batch)
 
             if epoch % 1000 == 0:
-                output = self.forward(x_batch)
                 loss_value = self.loss.forward(y_batch, output)
-                print(f'Epoch {epoch}, Loss: {loss_value}')
+                self._log_epoch_loss(epoch, loss_value)
