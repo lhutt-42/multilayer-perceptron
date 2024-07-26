@@ -15,7 +15,7 @@ from .model.losses import Loss
 from .model.layers import DenseLayer
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
 from .model.optimizers import GradientDescentOptimizer
-from .model.initializers import RandomInitializer, ZeroInitializer
+from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
 
 # pylint: disable=too-many-arguments, unused-argument
@@ -63,16 +63,16 @@ def train(
             input_shape,
             SigmoidActivation(),
             GradientDescentOptimizer(learning_rate),
-            weight_initializer=RandomInitializer(),
-            bias_initializer=RandomInitializer(),
+            weight_initializer=HeInitializer(),
+            bias_initializer=ZeroInitializer(),
             regularizer=L1Regularizer()
         ),
         DenseLayer(
             output_shape,
             SoftmaxActivation(),
             GradientDescentOptimizer(learning_rate),
-            weight_initializer=RandomInitializer(),
-            bias_initializer=RandomInitializer(),
+            weight_initializer=HeInitializer(),
+            bias_initializer=ZeroInitializer(),
             regularizer=L1Regularizer()
         )
     ])
