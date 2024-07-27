@@ -30,14 +30,16 @@ class Layer:
         weight_initializer: Initializer = ZeroInitializer(),
         bias_initializer: Initializer = ZeroInitializer(),
         regularizer: Optional[Regularizer] = None,
+        gradient_clipping: Optional[float] = 1.0
     ) -> None:
-        self.layer_size: int = layer_size
-        self.activation: Activation = activation
-        self.optimizer: Optimizer = optimizer
+        self.layer_size = layer_size
+        self.activation = activation
+        self.optimizer = optimizer
 
-        self.weight_initializer: Initializer = weight_initializer
-        self.bias_initializer: Initializer = bias_initializer
-        self.regularizer: Optional[Regularizer] = regularizer
+        self.weight_initializer = weight_initializer
+        self.bias_initializer = bias_initializer
+        self.regularizer = regularizer
+        self.gradient_clipping = gradient_clipping
 
         self.weights: np.ndarray | None = None
         self.biases: np.ndarray | None = None

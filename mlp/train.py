@@ -6,19 +6,22 @@ import sys
 import logging
 from typing import List, Type
 
-from .parser.file import read_dataset
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 # pylint: disable=unused-import
+from .parser.file import read_dataset
 from .model.models import MiniBatchModel, BatchModel
 from .model.preprocessing import binarize, normalize
 from .model.losses import Loss
 from .model.layers import DenseLayer
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
 from .model.optimizers import GradientDescentOptimizer
-from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer
+from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
 
-# pylint: disable=too-many-arguments, unused-argument
+
+# pylint: disable=too-many-arguments, too-many-locals, unused-argument
 def train(
     dataset_path: str,
     layers: List[int],
@@ -56,6 +59,8 @@ def train(
     _, input_shape = x.shape
     _, output_shape = y.shape
 
+    x_train, x_val, y_train, y_val = train_test_split(x, y, test_size=0.2)
+
     model = BatchModel()
 
     model.add([
@@ -63,9 +68,33 @@ def train(
             input_shape,
             SigmoidActivation(),
             GradientDescentOptimizer(learning_rate),
-            weight_initializer=HeInitializer(),
+            weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=L1Regularizer()
+        ),
+        DenseLayer(
+            16,
+            SigmoidActivation(),
+            GradientDescentOptimizer(learning_rate),
+            weight_initializer=XavierInitializer(),
+            bias_initializer=ZeroInitializer(),
+            regularizer=L2Regularizer()
+        ),
+        DenseLayer(
+            12,
+            SigmoidActivation(),
+            GradientDescentOptimizer(learning_rate),
+            weight_initializer=XavierInitializer(),
+            bias_initializer=ZeroInitializer(),
+            regularizer=L2Regularizer()
+        ),
+        DenseLayer(
+            6,
+            SigmoidActivation(),
+            GradientDescentOptimizer(learning_rate),
+            weight_initializer=XavierInitializer(),
+            bias_initializer=ZeroInitializer(),
+            regularizer=L2Regularizer()
         ),
         DenseLayer(
             output_shape,
@@ -73,12 +102,27 @@ def train(
             GradientDescentOptimizer(learning_rate),
             weight_initializer=HeInitializer(),
             bias_initializer=ZeroInitializer(),
-            regularizer=L1Regularizer()
+            regularizer=None
         )
     ])
 
     try:
-        model.fit(x, y, loss=loss(), epochs=epochs, batch_size=batch_size)
+        model.fit(
+            x_train,
+            y_train,
+            x_val,
+            y_val,
+            loss=loss(),
+            epochs=epochs,
+            batch_size=batch_size
+        )
     except KeyboardInterrupt:
         logging.error('Training interrupted.')
         sys.exit(1)
+
+    plt.plot(model.loss_metrics.train_loss, label='Train Loss')
+    plt.plot(model.loss_metrics.val_loss, label='Val Loss')
+    plt.legend()
+    plt.ylim(0, 1)
+
+    plt.show()

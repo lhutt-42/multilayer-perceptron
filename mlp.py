@@ -15,6 +15,7 @@ def main() -> None:
     """
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
     parser = create_parser()
     args = parser.parse_args()

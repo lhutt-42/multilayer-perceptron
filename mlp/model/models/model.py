@@ -7,7 +7,7 @@ from typing import List
 
 import numpy as np
 
-from . import Layer, Loss
+from . import Layer, Loss, LossMetrics
 
 
 class Model:
@@ -16,6 +16,7 @@ class Model:
     """
 
     loss: Loss | None = None
+    loss_metrics: LossMetrics = LossMetrics()
 
 
     def __init__(self) -> None:
@@ -56,7 +57,7 @@ class Model:
                 layer.initialize(self.layers[i - 1].layer_size)
 
 
-    def _log_epoch_loss(self, epoch: int, loss_value: float) -> None:
+    def _log_epoch_loss(self, epoch: int) -> None:
         """
         Displays the epoch and loss value.
 
@@ -65,7 +66,12 @@ class Model:
             loss_value (float): The loss value.
         """
 
-        logging.info('Epoch %5s, Loss: %.4f', epoch, loss_value)
+        logging.info(
+            'Epoch %5s, Train Loss: %.4f, Val Loss: %.4f',
+            epoch,
+            self.loss_metrics.train_loss[-1],
+            self.loss_metrics.val_loss[-1]
+        )
 
 
     def forward(self, x: np.ndarray) -> np.ndarray:
@@ -84,36 +90,36 @@ class Model:
         return x
 
 
-    def backward(self, x: np.ndarray, y: np.ndarray) -> None:
+    def backward(self, gradient: np.ndarray) -> None:
         """
         Computes the backward pass of the model.
 
         Args:
-            x (np.ndarray): The input data.
-            y (np.ndarray): The target data.
+            gradient (np.ndarray): The gradient.
         """
 
-        if self.loss is None:
-            raise ValueError('Loss function not set.')
-
-        output_error = self.loss.backward(y, x)
         for layer in reversed(self.layers):
-            output_error = layer.backward(output_error)
+            gradient = layer.backward(gradient)
 
 
+    # pylint: disable=too-many-arguments
     def fit(
         self,
-        x: np.ndarray,
-        y: np.ndarray,
+        x_train: np.ndarray,
+        y_train: np.ndarray,
+        x_val: np.ndarray,
+        y_val: np.ndarray,
         loss: Loss,
         **kwargs
-     ) -> None:
+     ) -> LossMetrics:
         """
         Trains the model.
 
         Args:
-            x (np.ndarray): The input data.
-            y (np.ndarray): The target data.
+            x_train (np.ndarray): The input data for training.
+            y_train (np.ndarray): The target data for training.
+            x_val (np.ndarray): The input data for validation.
+            y_val (np.ndarray): The target data for validation.
             loss (Loss): The loss function to use.
         """
 

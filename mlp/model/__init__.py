@@ -6,16 +6,20 @@ from . import activations
 from . import initializers
 from . import layers
 from . import losses
+from . import metrics
 from . import models
 from . import optimizers
 from . import preprocessing
+from . import regularizers
 
 __all__ = [
     'activations',
     'initializers',
     'layers',
     'losses',
+    'metrics',
     'models',
     'optimizers',
     'preprocessing',
+    'regularizers',
 ]
