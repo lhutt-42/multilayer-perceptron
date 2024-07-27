@@ -2,22 +2,41 @@
 Main script of the project.
 """
 
-from mlp.parser.arguments import create_parser
-from mlp.split import split_dataset
+import logging
 
-def main():
+from mlp.parser import create_parser
+from mlp import split
+from mlp import train
+
+
+def main() -> None:
     """
     Main function of the script.
     """
+
+    logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
     parser = create_parser()
     args = parser.parse_args()
 
     match args.command:
         case 'split':
-            split_dataset(args.dataset, args.test_size, args.out_dir)
+            split(
+                args.dataset,
+                args.test_size,
+                args.out_dir
+            )
         case 'train':
-            ...
+            train(
+                args.dataset,
+                args.layers,
+                args.epochs,
+                args.batch_size,
+                args.learning_rate,
+                args.loss,
+                args.out_dir
+            )
         case 'predict':
             ...
 

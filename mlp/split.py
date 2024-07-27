@@ -6,10 +6,10 @@ import os
 
 from sklearn.model_selection import train_test_split
 
-from mlp.parser.file import read_dataset, save_dataset
+from .parser.file import read_dataset, save_dataset
 
 
-def split_dataset(dataset_path: str, test_size: float, out_dir: str) -> None:
+def split(dataset_path: str, test_size: float, out_dir: str) -> None:
     """
     Splits the dataset into training and test sets.
 

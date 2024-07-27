@@ -10,7 +10,18 @@
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": [],
+    "words": [
+        "ndarray",
+        "keepdims",
+        "select_dtypes",
+        "randn",
+        "ylim",
+        "softmax",
+        "relu",
+        "binarize",
+        "binarizes",
+        "regularizers"
+    ],
     "ignoreWords": [],
     "import": []
 }
