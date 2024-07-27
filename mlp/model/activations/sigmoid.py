@@ -24,7 +24,11 @@ class SigmoidActivation(Activation):
         """
 
         x_clipped = np.clip(x, -500, 500)
-        return 1 / (1 + np.exp(-x_clipped))
+        return np.where(
+            x_clipped >= 0,
+            1 / (1 + np.exp(-x_clipped)),
+            np.exp(x_clipped) / (1 + np.exp(x_clipped))
+        )
 
 
     def gradient(self, x: np.ndarray) -> np.ndarray:
