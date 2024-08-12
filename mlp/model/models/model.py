@@ -2,12 +2,11 @@
 Model class.
 """
 
-import logging
 from typing import List
 
 import numpy as np
 
-from . import Layer, Loss, LossMetrics
+from . import Layer, Loss, Metrics
 
 
 class Model:
@@ -15,13 +14,12 @@ class Model:
     Model class.
     """
 
-    loss: Loss | None = None
-    loss_metrics: LossMetrics = LossMetrics()
-
-
     def __init__(self) -> None:
         self.layers: List[Layer] = []
         self.input_size: int | None = None
+
+        self.loss: Loss | None = None
+        self.metrics: Metrics | None = None
 
 
     def add(self, layers: Layer | List[Layer]) -> None:
@@ -57,23 +55,6 @@ class Model:
                 layer.initialize(self.layers[i - 1].layer_size)
 
 
-    def _log_epoch_loss(self, epoch: int) -> None:
-        """
-        Displays the epoch and loss value.
-
-        Args:
-            epoch (int): The epoch.
-            loss_value (float): The loss value.
-        """
-
-        logging.info(
-            'Epoch %5s, Train Loss: %.4f, Val Loss: %.4f',
-            epoch,
-            self.loss_metrics.train_loss[-1],
-            self.loss_metrics.val_loss[-1]
-        )
-
-
     def forward(self, x: np.ndarray) -> np.ndarray:
         """
         Computes the forward pass of the model.
@@ -107,19 +88,19 @@ class Model:
         self,
         x_train: np.ndarray,
         y_train: np.ndarray,
-        x_val: np.ndarray,
-        y_val: np.ndarray,
+        x_test: np.ndarray,
+        y_test: np.ndarray,
         loss: Loss,
         **kwargs
-     ) -> LossMetrics:
+     ) -> None:
         """
         Trains the model.
 
         Args:
             x_train (np.ndarray): The input data for training.
             y_train (np.ndarray): The target data for training.
-            x_val (np.ndarray): The input data for validation.
-            y_val (np.ndarray): The target data for validation.
+            x_test (np.ndarray): The input data for validation.
+            y_test (np.ndarray): The target data for validation.
             loss (Loss): The loss function to use.
         """
 

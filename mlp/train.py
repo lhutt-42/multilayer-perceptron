@@ -7,7 +7,6 @@ import logging
 from typing import List, Type
 
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 
 # pylint: disable=unused-import
 from .parser.file import read_dataset
@@ -19,6 +18,7 @@ from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivat
 from .model.optimizers import GradientDescentOptimizer
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
+from .model.metrics import Metrics, LossMetrics, AccuracyMetrics
 
 
 # pylint: disable=too-many-arguments, too-many-locals, unused-argument
@@ -119,10 +119,3 @@ def train(
     except KeyboardInterrupt:
         logging.error('Training interrupted.')
         sys.exit(1)
-
-    plt.plot(model.loss_metrics.train_loss, label='Train Loss')
-    plt.plot(model.loss_metrics.val_loss, label='Val Loss')
-    plt.legend()
-    plt.ylim(0, 1)
-
-    plt.show()
