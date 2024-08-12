@@ -22,10 +22,7 @@ class AccuracyMetrics(Data):
             y_pred (np.ndarray): The predicted labels.
         """
 
-        true_labels = np.argmax(y_true, axis=1)
-        pred_labels = np.argmax(y_pred, axis=1)
-
-        accuracy = np.mean(true_labels == pred_labels)
+        accuracy = self.calculate_accuracy(y_true, y_pred)
         self.train_values.append(accuracy)
 
 
@@ -39,8 +36,25 @@ class AccuracyMetrics(Data):
             y_pred (np.ndarray): The predicted labels.
         """
 
+        accuracy = self.calculate_accuracy(y_true, y_pred)
+        self.test_values.append(accuracy)
+
+
+    @staticmethod
+    def calculate_accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculates the accuracy.
+
+        Args:
+            y_true (np.ndarray): The true labels.
+            y_pred (np.ndarray): The predicted labels.
+
+        Returns:
+            float: The accuracy.
+        """
+
         true_labels = np.argmax(y_true, axis=1)
         pred_labels = np.argmax(y_pred, axis=1)
 
         accuracy = np.mean(true_labels == pred_labels)
-        self.test_values.append(accuracy)
+        return accuracy
