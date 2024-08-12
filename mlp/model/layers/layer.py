@@ -26,9 +26,9 @@ class Layer:
         self,
         layer_size: int,
         activation: Activation,
-        optimizer: Optimizer,
         weight_initializer: Initializer = ZeroInitializer(),
         bias_initializer: Initializer = ZeroInitializer(),
+        optimizer: Optional[Optimizer] = None,
         regularizer: Optional[Regularizer] = None,
         gradient_clipping: Optional[float] = 1.0
     ) -> None:
@@ -38,9 +38,9 @@ class Layer:
         Args:
             layer_size (int): The size of the layer.
             activation (Activation): The activation function.
-            optimizer (Optimizer): The optimizer.
             weight_initializer (Initializer): The weight initializer.
             bias_initializer (Initializer): The bias initializer.
+            optimizer (Optimizer): The optimizer.
             regularizer (Regularizer): The regularizer.
             gradient_clipping (float): The gradient clipping value.
         """

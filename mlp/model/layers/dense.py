@@ -54,11 +54,12 @@ class DenseLayer(Layer):
         if self.regularizer is not None:
             weights_gradient += self.regularizer.gradient(self.weights)
 
-        self.optimizer.update(
-            self.weights,
-            self.biases,
-            weights_gradient,
-            biases_gradient
-        )
+        if self.optimizer is not None:
+            self.weights, self.biases = self.optimizer.update(
+                self.weights,
+                self.biases,
+                weights_gradient,
+                biases_gradient
+            )
 
         return input_gradient

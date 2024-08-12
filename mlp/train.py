@@ -65,43 +65,43 @@ def train(
 
     model.add([
         DenseLayer(
-            input_shape,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=input_shape,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
+            optimizer=GradientDescentOptimizer(learning_rate),
             regularizer=L1Regularizer()
         ),
         DenseLayer(
-            16,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=16,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
+            optimizer=GradientDescentOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            12,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=12,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
+            optimizer=GradientDescentOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            6,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=6,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
+            optimizer=GradientDescentOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            output_shape,
-            SoftmaxActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=output_shape,
+            activation=SoftmaxActivation(),
             weight_initializer=HeInitializer(),
             bias_initializer=ZeroInitializer(),
+            optimizer=GradientDescentOptimizer(learning_rate),
             regularizer=None
         )
     ])
