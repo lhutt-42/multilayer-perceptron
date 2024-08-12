@@ -2,10 +2,12 @@
 Model class with batch training.
 """
 
+import logging
+
 import numpy as np
 
 from .model import Model
-from . import Loss, LossMetrics
+from . import Loss, Metrics
 
 
 # pylint: disable=duplicate-code
@@ -14,14 +16,13 @@ class BatchModel(Model):
     Model class with batch training.
     """
 
-
     # pylint: disable=too-many-arguments, arguments-differ, too-many-locals
     def fit(
         self,
         x_train: np.ndarray,
         y_train: np.ndarray,
-        x_val: np.ndarray,
-        y_val: np.ndarray,
+        x_test: np.ndarray,
+        y_test: np.ndarray,
         loss: Loss,
         epochs: int,
         **kwargs
@@ -38,21 +39,26 @@ class BatchModel(Model):
             epochs (int): The number of epochs to train the model.
         """
 
+        logging.info('Training the model using batch training.')
+
         self.loss = loss
         self._initialize_layers(x_train.shape[1])
-        self.loss_metrics = LossMetrics()
+
+        self.metrics = Metrics()
 
         for epoch in range(epochs):
             train_output = self.forward(x_train)
             train_loss = self.loss.forward(y_train, train_output)
-            self.loss_metrics.add_train_loss(train_loss)
+            self.metrics.add_train(y_true=y_train, y_pred=train_output, loss=train_loss)
 
             gradient = loss.backward(y_train, train_output)
             self.backward(gradient)
 
-            val_output = self.forward(x_val)
-            val_loss = loss.forward(y_val, val_output)
-            self.loss_metrics.add_val_loss(val_loss)
+            test_output = self.forward(x_test)
+            test_loss = loss.forward(y_test, test_output)
+            self.metrics.add_test(y_true=y_test, y_pred=test_output, loss=test_loss)
 
             if epoch % 1000 == 0:
-                self._log_epoch_loss(epoch)
+                self.metrics.log(epoch)
+
+        logging.info('Finished training the model.')

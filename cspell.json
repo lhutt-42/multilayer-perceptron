@@ -15,6 +15,7 @@
         "keepdims",
         "select_dtypes",
         "randn",
+        "argmax",
         "ylim",
         "softmax",
         "relu",
