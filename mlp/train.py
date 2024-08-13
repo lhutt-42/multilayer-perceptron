@@ -15,7 +15,7 @@ from .model.preprocessing import binarize, normalize
 from .model.losses import Loss
 from .model.layers import DenseLayer
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
-from .model.optimizers import GradientDescentOptimizer
+from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
 from .model.metrics import Metrics, LossMetrics, AccuracyMetrics
@@ -69,15 +69,15 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=GradientDescentOptimizer(learning_rate),
+            optimizer=AdamOptimizer(learning_rate),
             regularizer=L1Regularizer()
         ),
         DenseLayer(
-            layer_size=16,
+            layer_size=18,
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=GradientDescentOptimizer(learning_rate),
+            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -85,7 +85,7 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=GradientDescentOptimizer(learning_rate),
+            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -93,7 +93,7 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=GradientDescentOptimizer(learning_rate),
+            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -101,7 +101,7 @@ def train(
             activation=SoftmaxActivation(),
             weight_initializer=HeInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=GradientDescentOptimizer(learning_rate),
+            optimizer=AdamOptimizer(learning_rate),
             regularizer=None
         )
     ])
