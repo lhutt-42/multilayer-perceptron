@@ -15,7 +15,7 @@ from .model.preprocessing import binarize, normalize
 from .model.losses import Loss
 from .model.layers import DenseLayer
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
-from .model.optimizers import GradientDescentOptimizer
+from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
 from .model.metrics import Metrics, LossMetrics, AccuracyMetrics
@@ -65,41 +65,36 @@ def train(
 
     model.add([
         DenseLayer(
-            input_shape,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=input_shape,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=L1Regularizer()
         ),
         DenseLayer(
-            16,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=18,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            12,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=12,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            6,
-            SigmoidActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=6,
+            activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
-            output_shape,
-            SoftmaxActivation(),
-            GradientDescentOptimizer(learning_rate),
+            layer_size=output_shape,
+            activation=SoftmaxActivation(),
             weight_initializer=HeInitializer(),
             bias_initializer=ZeroInitializer(),
             regularizer=None
@@ -112,8 +107,9 @@ def train(
             y_train,
             x_val,
             y_val,
-            loss=loss(),
             epochs=epochs,
+            loss=loss(),
+            optimizer=AdamOptimizer(learning_rate),
             batch_size=batch_size
         )
     except KeyboardInterrupt:

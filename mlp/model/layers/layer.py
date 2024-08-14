@@ -26,9 +26,9 @@ class Layer:
         self,
         layer_size: int,
         activation: Activation,
-        optimizer: Optimizer,
         weight_initializer: Initializer = ZeroInitializer(),
         bias_initializer: Initializer = ZeroInitializer(),
+        optimizer: Optional[Optimizer] = None,
         regularizer: Optional[Regularizer] = None,
         gradient_clipping: Optional[float] = 1.0
     ) -> None:
@@ -38,9 +38,9 @@ class Layer:
         Args:
             layer_size (int): The size of the layer.
             activation (Activation): The activation function.
-            optimizer (Optimizer): The optimizer.
             weight_initializer (Initializer): The weight initializer.
             bias_initializer (Initializer): The bias initializer.
+            optimizer (Optimizer): The optimizer.
             regularizer (Regularizer): The regularizer.
             gradient_clipping (float): The gradient clipping value.
         """
@@ -57,6 +57,9 @@ class Layer:
         self.weights: np.ndarray | None = None
         self.biases: np.ndarray | None = None
 
+        self.weights_gradient: np.ndarray | None = None
+        self.biases_gradient: np.ndarray | None = None
+
         self.input: np.ndarray = np.array([])
         self.output: np.ndarray = np.array([])
 
@@ -71,6 +74,42 @@ class Layer:
 
         self.weights = self.weight_initializer((input_size, self.layer_size))
         self.biases = self.bias_initializer((1, self.layer_size))
+
+
+    def clip(self, gradient_clipping: float) -> None:
+        """
+        Clips the gradients.
+
+        Args:
+            gradient_clipping (float): The gradient clipping value.
+        """
+
+        self.weights_gradient = np.clip(
+            self.weights_gradient,
+            -gradient_clipping,
+            gradient_clipping,
+        )
+        self.biases_gradient = np.clip(
+            self.biases_gradient,
+            -gradient_clipping,
+            gradient_clipping,
+        )
+
+
+    def optimize(self, optimizer: Optimizer) -> None:
+        """
+        Optimizes the weights and biases.
+
+        Args:
+            optimizer (Optimizer): The optimizer.
+        """
+
+        self.weights, self.biases = optimizer.update(
+            self.weights,
+            self.biases,
+            self.weights_gradient,
+            self.biases_gradient
+        )
 
 
     def forward(self, x: np.ndarray) -> np.ndarray:

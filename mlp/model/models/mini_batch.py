@@ -3,12 +3,13 @@ Model class with mini-batch training.
 """
 
 import logging
+from typing import Optional
 from itertools import cycle, batched
 
 import numpy as np
 
 from .model import Model
-from . import Loss, Metrics
+from . import Loss, Metrics, Optimizer, BinaryCrossEntropyLoss
 
 
 # pylint: disable=duplicate-code
@@ -24,9 +25,10 @@ class MiniBatchModel(Model):
         y_train: np.ndarray,
         x_test: np.ndarray,
         y_test: np.ndarray,
-        loss: Loss,
         epochs: int,
-        batch_size: int,
+        loss: Loss = BinaryCrossEntropyLoss,
+        optimizer: Optional[Optimizer] = None,
+        batch_size: int = 32,
         **kwargs
      ) -> None:
         """
@@ -37,15 +39,16 @@ class MiniBatchModel(Model):
             y_train (np.ndarray): The target data for training.
             x_test (np.ndarray): The input data for validation.
             y_test (np.ndarray): The target data for validation.
-            loss (Loss): The loss function to use.
             epochs (int): The number of epochs to train the model.
+            loss (Loss): The loss function to use.
+            optimizer (Optimizer): The optimizer to use.
             batch_size (int): The batch size used during training.
         """
 
         logging.info('Training the model using mini-batch training.')
 
         self.loss = loss
-        self._initialize_layers(x_train.shape[1])
+        self._initialize_layers(x_train.shape[1], optimizer=optimizer)
 
         self.metrics = Metrics()
 
