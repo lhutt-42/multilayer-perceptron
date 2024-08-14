@@ -4,6 +4,8 @@ Main script of the project.
 
 import logging
 
+import numpy as np
+
 from mlp.parser import create_parser
 from mlp import split
 from mlp import train
@@ -19,6 +21,9 @@ def main() -> None:
 
     parser = create_parser()
     args = parser.parse_args()
+
+    if args.seed:
+        np.random.seed(args.seed)
 
     match args.command:
         case 'split':

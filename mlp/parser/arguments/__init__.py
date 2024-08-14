@@ -27,6 +27,12 @@ def create_parser() -> argparse.ArgumentParser:
     create_train_subparser(subparsers)
     create_predict_subparser(subparsers)
 
+    parser.add_argument(
+        '--seed',
+        type=int,
+        help='Random seed.'
+    )
+
     return parser
 
 
