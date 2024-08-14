@@ -2,11 +2,12 @@
 Model class.
 """
 
-from typing import List
+from copy import deepcopy
+from typing import List, Optional
 
 import numpy as np
 
-from . import Layer, Loss, Metrics
+from . import Layer, Loss, Metrics, Optimizer, BinaryCrossEntropyLoss
 
 
 class Model:
@@ -38,12 +39,17 @@ class Model:
         self.layers.append(layers)
 
 
-    def _initialize_layers(self, input_size: int) -> None:
+    def _initialize_layers(
+        self,
+        input_size: int,
+        optimizer: Optional[Optimizer] = None
+    ) -> None:
         """
         Initializes the layers of the model.
 
         Args:
             input_size (int): The size of the input.
+            optimizer (Optimizer): The optimizer to use.
         """
 
         self.input_size = input_size
@@ -53,6 +59,9 @@ class Model:
                 layer.initialize(self.input_size)
             else:
                 layer.initialize(self.layers[i - 1].layer_size)
+
+            if optimizer is not None and layer.optimizer is None:
+                layer.optimizer = deepcopy(optimizer)
 
 
     def forward(self, x: np.ndarray) -> np.ndarray:
@@ -90,7 +99,9 @@ class Model:
         y_train: np.ndarray,
         x_test: np.ndarray,
         y_test: np.ndarray,
-        loss: Loss,
+        epochs: int,
+        loss: Loss = BinaryCrossEntropyLoss,
+        optimizer: Optional[Optimizer] = None,
         **kwargs
      ) -> None:
         """
@@ -101,7 +112,9 @@ class Model:
             y_train (np.ndarray): The target data for training.
             x_test (np.ndarray): The input data for validation.
             y_test (np.ndarray): The target data for validation.
+            epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
+            optimizer (Optimizer): The optimizer to use.
         """
 
         raise NotImplementedError

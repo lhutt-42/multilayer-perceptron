@@ -36,30 +36,16 @@ class DenseLayer(Layer):
         gradient = gradient * self.activation.gradient(self.output)
 
         input_gradient = np.dot(gradient, self.weights.T)
-        weights_gradient = np.dot(self.input.T, gradient)
-        biases_gradient = np.sum(gradient, axis=0, keepdims=True)
+        self.weights_gradient = np.dot(self.input.T, gradient)
+        self.biases_gradient = np.sum(gradient, axis=0, keepdims=True)
 
         if self.gradient_clipping is not None:
-            weights_gradient = np.clip(
-                weights_gradient,
-                -self.gradient_clipping,
-                self.gradient_clipping,
-            )
-            biases_gradient = np.clip(
-                biases_gradient,
-                -self.gradient_clipping,
-                self.gradient_clipping,
-            )
+            self.clip(self.gradient_clipping)
 
         if self.regularizer is not None:
-            weights_gradient += self.regularizer.gradient(self.weights)
+            self.weights_gradient += self.regularizer.gradient(self.weights)
 
         if self.optimizer is not None:
-            self.weights, self.biases = self.optimizer.update(
-                self.weights,
-                self.biases,
-                weights_gradient,
-                biases_gradient
-            )
+            self.optimize(self.optimizer)
 
         return input_gradient

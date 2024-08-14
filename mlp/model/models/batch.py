@@ -3,11 +3,12 @@ Model class with batch training.
 """
 
 import logging
+from typing import Optional
 
 import numpy as np
 
 from .model import Model
-from . import Loss, Metrics
+from . import Loss, Metrics, Optimizer, BinaryCrossEntropyLoss
 
 
 # pylint: disable=duplicate-code
@@ -23,8 +24,9 @@ class BatchModel(Model):
         y_train: np.ndarray,
         x_test: np.ndarray,
         y_test: np.ndarray,
-        loss: Loss,
         epochs: int,
+        loss: Loss = BinaryCrossEntropyLoss,
+        optimizer: Optional[Optimizer] = None,
         **kwargs
      ) -> None:
         """
@@ -35,14 +37,15 @@ class BatchModel(Model):
             y_train (np.ndarray): The target data for training.
             x_val (np.ndarray): The input data for validation.
             y_val (np.ndarray): The target data for validation.
-            loss (Loss): The loss function to use.
             epochs (int): The number of epochs to train the model.
+            loss (Loss): The loss function to use.
+            optimizer (Optimizer): The optimizer to use.
         """
 
         logging.info('Training the model using batch training.')
 
         self.loss = loss
-        self._initialize_layers(x_train.shape[1])
+        self._initialize_layers(x_train.shape[1], optimizer=optimizer)
 
         self.metrics = Metrics()
 

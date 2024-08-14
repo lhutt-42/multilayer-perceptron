@@ -69,7 +69,6 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=AdamOptimizer(learning_rate),
             regularizer=L1Regularizer()
         ),
         DenseLayer(
@@ -77,7 +76,6 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -85,7 +83,6 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -93,7 +90,6 @@ def train(
             activation=SigmoidActivation(),
             weight_initializer=XavierInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=AdamOptimizer(learning_rate),
             regularizer=L2Regularizer()
         ),
         DenseLayer(
@@ -101,7 +97,6 @@ def train(
             activation=SoftmaxActivation(),
             weight_initializer=HeInitializer(),
             bias_initializer=ZeroInitializer(),
-            optimizer=AdamOptimizer(learning_rate),
             regularizer=None
         )
     ])
@@ -112,8 +107,9 @@ def train(
             y_train,
             x_val,
             y_val,
-            loss=loss(),
             epochs=epochs,
+            loss=loss(),
+            optimizer=AdamOptimizer(learning_rate),
             batch_size=batch_size
         )
     except KeyboardInterrupt:
