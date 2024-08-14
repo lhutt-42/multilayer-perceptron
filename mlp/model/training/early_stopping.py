@@ -30,8 +30,8 @@ class EarlyStopping:
         self.counter: int = 0
         self.best_loss: float = np.inf
 
-        self.weights: np.ndarray | None = None
-        self.biases: np.ndarray | None = None
+        self.weights: List[np.ndarray] | None = None
+        self.biases: List[np.ndarray] | None = None
 
 
     def save_weights(self, layers: List[Layer]) -> None:
@@ -42,12 +42,12 @@ class EarlyStopping:
             layers (List[Layer]): The layers of the model
         """
 
-        self.weights = np.array(
-            [np.copy(layer.weights) for layer in layers]
-        )
-        self.biases = np.array(
-            [np.copy(layer.biases) for layer in layers]
-        )
+        self.weights = [
+            np.copy(layer.weights) for layer in layers
+        ]
+        self.biases = [
+            np.copy(layer.biases) for layer in layers
+        ]
 
 
     def restore_weights(self, layers: List[Layer]) -> None:
@@ -66,7 +66,7 @@ class EarlyStopping:
             layer.biases = self.biases[i]
 
 
-    def __call__(self, loss: float, layers: List[Layer]) -> bool:
+    def should_stop(self, loss: float, layers: List[Layer]) -> bool:
         """
         Checks if the training should stop.
 
