@@ -10,15 +10,15 @@ from sklearn.model_selection import train_test_split
 
 # pylint: disable=unused-import
 from .parser.file import read_dataset
-from .model.models import MiniBatchModel, BatchModel
-from .model.preprocessing import binarize, normalize
-from .model.losses import Loss
-from .model.layers import DenseLayer
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
-from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
+from .model.layers import DenseLayer
+from .model.losses import Loss
+from .model.models import MiniBatchModel, BatchModel
+from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
+from .model.plots import Plot
+from .model.preprocessing import binarize, normalize
 from .model.regularizers import L1Regularizer, L2Regularizer
-from .model.metrics import Metrics, LossMetrics, AccuracyMetrics
 from .model.training import EarlyStopping
 
 
@@ -117,3 +117,17 @@ def train(
     except KeyboardInterrupt:
         logging.error('Training interrupted.')
         sys.exit(1)
+
+    loss_plot = Plot('Loss')
+    loss_plot.plot_data(model.metrics.loss)
+    loss_plot.render()
+
+    accuracy_plot = Plot('Accuracy')
+    accuracy_plot.plot_data(model.metrics.accuracy)
+    accuracy_plot.render()
+
+    precision_plot = Plot('Precision')
+    precision_plot.plot_data(model.metrics.precision)
+    precision_plot.render()
+
+    Plot.show()
