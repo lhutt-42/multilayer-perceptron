@@ -4,10 +4,18 @@ Model class.
 
 from copy import deepcopy
 from typing import List, Optional
+import logging
 
 import numpy as np
 
-from . import Layer, Loss, Metrics, Optimizer, BinaryCrossEntropyLoss
+from . import (
+    Layer,
+    Loss,
+    Metrics,
+    Optimizer,
+    BinaryCrossEntropyLoss,
+    EarlyStopping
+)
 
 
 class Model:
@@ -39,31 +47,6 @@ class Model:
         self.layers.append(layers)
 
 
-    def _initialize_layers(
-        self,
-        input_size: int,
-        optimizer: Optional[Optimizer] = None
-    ) -> None:
-        """
-        Initializes the layers of the model.
-
-        Args:
-            input_size (int): The size of the input.
-            optimizer (Optimizer): The optimizer to use.
-        """
-
-        self.input_size = input_size
-
-        for i, layer in enumerate(self.layers):
-            if i == 0:
-                layer.initialize(self.input_size)
-            else:
-                layer.initialize(self.layers[i - 1].layer_size)
-
-            if optimizer is not None and layer.optimizer is None:
-                layer.optimizer = deepcopy(optimizer)
-
-
     def forward(self, x: np.ndarray) -> np.ndarray:
         """
         Computes the forward pass of the model.
@@ -92,6 +75,56 @@ class Model:
             gradient = layer.backward(gradient)
 
 
+    def _initialize_layers(
+        self,
+        input_size: int,
+        optimizer: Optional[Optimizer] = None
+    ) -> None:
+        """
+        Initializes the layers of the model.
+
+        Args:
+            input_size (int): The size of the input.
+            optimizer (Optimizer): The optimizer to use.
+        """
+
+        self.input_size = input_size
+
+        for i, layer in enumerate(self.layers):
+            if i == 0:
+                layer.initialize(self.input_size)
+            else:
+                layer.initialize(self.layers[i - 1].layer_size)
+
+            if optimizer is not None and layer.optimizer is None:
+                layer.optimizer = deepcopy(optimizer)
+
+
+    def _should_stop(self, epoch: int, early_stopping: Optional[EarlyStopping]) -> bool:
+        """
+        Checks if the training should stop.
+
+        Args:
+            epoch (int): The current epoch.
+            early_stopping (EarlyStopping): The early stopping.
+
+        Returns:
+            bool: True if the training should stop, False otherwise.
+        """
+
+        if early_stopping is None:
+            return False
+
+        test_loss = self.metrics.loss.test_values[-1]
+        if early_stopping.should_stop(test_loss, self.layers) is False:
+            return False
+
+        early_stopping.restore_weights(self.layers)
+        self.metrics.log(epoch)
+        logging.info('Early stopping the model at epoch %d.', epoch)
+
+        return True
+
     # pylint: disable=too-many-arguments
     def fit(
         self,
@@ -102,6 +135,7 @@ class Model:
         epochs: int,
         loss: Loss = BinaryCrossEntropyLoss,
         optimizer: Optional[Optimizer] = None,
+        early_stopping: Optional[EarlyStopping] = None,
         **kwargs
      ) -> None:
         """
@@ -115,6 +149,7 @@ class Model:
             epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
             optimizer (Optimizer): The optimizer to use.
+            early_stopping (EarlyStopping): The early stopping.
         """
 
         raise NotImplementedError

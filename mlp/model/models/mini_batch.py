@@ -9,7 +9,13 @@ from itertools import cycle, batched
 import numpy as np
 
 from .model import Model
-from . import Loss, Metrics, Optimizer, BinaryCrossEntropyLoss
+from . import (
+    Loss,
+    Metrics,
+    Optimizer,
+    BinaryCrossEntropyLoss,
+    EarlyStopping
+)
 
 
 # pylint: disable=duplicate-code
@@ -28,6 +34,7 @@ class MiniBatchModel(Model):
         epochs: int,
         loss: Loss = BinaryCrossEntropyLoss,
         optimizer: Optional[Optimizer] = None,
+        early_stopping: Optional[EarlyStopping] = None,
         batch_size: int = 32,
         **kwargs
      ) -> None:
@@ -42,6 +49,7 @@ class MiniBatchModel(Model):
             epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
             optimizer (Optimizer): The optimizer to use.
+            early_stopping (EarlyStopping): The early stopping.
             batch_size (int): The batch size used during training.
         """
 
@@ -71,6 +79,9 @@ class MiniBatchModel(Model):
             test_output = self.forward(x_test)
             test_loss = loss.forward(y_test, test_output)
             self.metrics.add_test(y_true=y_test, y_pred=test_output, loss=test_loss)
+
+            if self._should_stop(epoch, early_stopping):
+                break
 
             if epoch % 1000 == 0:
                 self.metrics.log(epoch)

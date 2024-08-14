@@ -11,6 +11,7 @@ from . import models
 from . import optimizers
 from . import preprocessing
 from . import regularizers
+from . import training
 
 __all__ = [
     'activations',
@@ -22,4 +23,5 @@ __all__ = [
     'optimizers',
     'preprocessing',
     'regularizers',
+    'training',
 ]
