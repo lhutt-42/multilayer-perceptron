@@ -19,6 +19,7 @@ from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.regularizers import L1Regularizer, L2Regularizer
 from .model.metrics import Metrics, LossMetrics, AccuracyMetrics
+from .model.training import EarlyStopping
 
 
 # pylint: disable=too-many-arguments, too-many-locals, unused-argument
@@ -110,6 +111,7 @@ def train(
             epochs=epochs,
             loss=loss(),
             optimizer=AdamOptimizer(learning_rate),
+            early_stopping=EarlyStopping(),
             batch_size=batch_size
         )
     except KeyboardInterrupt:

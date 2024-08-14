@@ -15,7 +15,7 @@ class EarlyStopping:
     Early stopping class.
     """
 
-    def __init__(self, patience: int = 5, delta: float = 0.0):
+    def __init__(self, patience: int = 1000, delta: float = 0.0):
         """
         Initializes the early stopping.
 
