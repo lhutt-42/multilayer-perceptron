@@ -9,6 +9,7 @@ from . import losses
 from . import metrics
 from . import models
 from . import optimizers
+from . import plots
 from . import preprocessing
 from . import regularizers
 from . import training
@@ -21,6 +22,7 @@ __all__ = [
     'metrics',
     'models',
     'optimizers',
+    'plots',
     'preprocessing',
     'regularizers',
     'training',

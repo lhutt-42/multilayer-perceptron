@@ -21,7 +21,12 @@
         "relu",
         "binarize",
         "binarizes",
-        "regularizers"
+        "regularizers",
+        "ndimage",
+        "xlabel",
+        "ylabel",
+        "linestyle",
+        "figsize"
     ],
     "ignoreWords": [],
     "import": []
