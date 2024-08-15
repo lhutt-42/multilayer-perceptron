@@ -30,7 +30,9 @@ class Layer:
         bias_initializer: Initializer = ZeroInitializer(),
         optimizer: Optional[Optimizer] = None,
         regularizer: Optional[Regularizer] = None,
-        gradient_clipping: Optional[float] = 1.0
+        gradient_clipping: Optional[float] = 1.0,
+        weights: Optional[np.ndarray] = None,
+        biases: Optional[np.ndarray] = None,
     ) -> None:
         """
         Initializes the layer.
@@ -54,8 +56,8 @@ class Layer:
         self.regularizer = regularizer
         self.gradient_clipping = gradient_clipping
 
-        self.weights: np.ndarray | None = None
-        self.biases: np.ndarray | None = None
+        self.weights = weights
+        self.biases = biases
 
         self.weights_gradient: np.ndarray | None = None
         self.biases_gradient: np.ndarray | None = None
