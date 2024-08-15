@@ -3,6 +3,7 @@
 # Project specific
 data/*
 !data/data.csv
+/models
 
 # VS Code settings
 .vscode/
