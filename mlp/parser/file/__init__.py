@@ -12,8 +12,10 @@ from ...model.metrics import (
 
 from .dataset import *
 from .metrics import *
+from .model import *
 
 __all__ = [
     'dataset',
-    'metrics'
+    'metrics',
+    'model'
 ]

@@ -14,7 +14,8 @@ from . import (
     Metrics,
     Optimizer,
     BinaryCrossEntropyLoss,
-    EarlyStopping
+    EarlyStopping,
+    save_model
 )
 
 
@@ -167,3 +168,14 @@ class Model:
         """
 
         return self.forward(x)
+
+
+    def save(self, directory: str) -> None:
+        """
+        Saves the model to a file.
+
+        Args:
+            directory (str): The path to save the model.
+        """
+
+        save_model(self, directory)
