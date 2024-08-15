@@ -9,11 +9,13 @@ from typing import List, Type
 from sklearn.model_selection import train_test_split
 
 # pylint: disable=unused-import
-from .parser.file import read_dataset
+from .parser.file.dataset import read_dataset
+
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.layers import DenseLayer
 from .model.losses import Loss
+from .model.metrics import Metrics
 from .model.models import MiniBatchModel, BatchModel
 from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.plots import Plot
@@ -118,16 +120,23 @@ def train(
         logging.error('Training interrupted.')
         sys.exit(1)
 
+    metrics = Metrics.load(out_dir, n=2)
+    metrics.insert(0, model.metrics)
+    model.metrics.save(out_dir)
+
     loss_plot = Plot('Loss')
-    loss_plot.plot_data(model.metrics.loss)
+    for metric in metrics:
+        loss_plot.plot_data(metric.loss)
     loss_plot.render()
 
     accuracy_plot = Plot('Accuracy')
-    accuracy_plot.plot_data(model.metrics.accuracy)
+    for metric in metrics:
+        accuracy_plot.plot_data(metric.accuracy)
     accuracy_plot.render()
 
     precision_plot = Plot('Precision')
-    precision_plot.plot_data(model.metrics.precision)
+    for metric in metrics:
+        precision_plot.plot_data(metric.precision)
     precision_plot.render()
 
     Plot.show()
