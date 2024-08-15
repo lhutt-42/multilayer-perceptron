@@ -9,7 +9,8 @@ from typing import List, Type
 from sklearn.model_selection import train_test_split
 
 # pylint: disable=unused-import
-from .parser.file import read_dataset
+from .parser.file.dataset import read_dataset
+
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
 from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
 from .model.layers import DenseLayer
@@ -117,6 +118,8 @@ def train(
     except KeyboardInterrupt:
         logging.error('Training interrupted.')
         sys.exit(1)
+
+    model.metrics.save(out_dir)
 
     loss_plot = Plot('Loss')
     loss_plot.plot_data(model.metrics.loss)

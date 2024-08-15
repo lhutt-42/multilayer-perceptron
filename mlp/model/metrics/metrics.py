@@ -7,6 +7,7 @@ import logging
 from .loss import LossMetrics
 from .accuracy import AccuracyMetrics
 from .precision import PrecisionMetrics
+from . import save_metrics
 
 
 class Metrics:
@@ -66,3 +67,14 @@ class Metrics:
             self.accuracy.train_values[-1],
             self.accuracy.test_values[-1],
         )
+
+
+    def save(self, out_dir: str) -> None:
+        """
+        Saves the metrics to a file.
+
+        Args:
+            out_dir (str): The path to save the metrics.
+        """
+
+        save_metrics(self, out_dir)
