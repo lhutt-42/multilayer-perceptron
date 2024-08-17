@@ -120,6 +120,8 @@ def train(
         logging.error('Training interrupted.')
         sys.exit(1)
 
+    model.save(out_dir)
+
     metrics = Metrics.load(out_dir, n=2)
     metrics.insert(0, model.metrics)
     model.metrics.save(out_dir)
