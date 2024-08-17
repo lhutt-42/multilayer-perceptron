@@ -11,7 +11,17 @@ def create_predict_subparser(subparsers) -> None:
         subparsers: The subparsers object.
     """
 
-    subparsers.add_parser(
+    parser_predict = subparsers.add_parser(
         'predict',
         help='Trains the model.'
+    )
+
+    parser_predict.add_argument(
+        'dataset',
+        help='Path to the dataset.',
+    )
+
+    parser_predict.add_argument(
+        'model',
+        help='Path to the model.',
     )
