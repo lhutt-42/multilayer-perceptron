@@ -183,12 +183,12 @@ class Model:
 
 
     @staticmethod
-    def load(directory: str) -> None:
+    def load(path: str) -> None:
         """
         Loads the model from a file.
 
         Args:
-            directory (str): The path to load the model.
+            path (str): The path to the model.
         """
 
-        return load_model(directory)
+        return load_model(path)

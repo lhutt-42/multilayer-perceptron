@@ -7,8 +7,7 @@ import logging
 import numpy as np
 
 from mlp.parser import create_parser
-from mlp import split
-from mlp import train
+from mlp import split, train, predict
 
 
 def main() -> None:
@@ -43,7 +42,10 @@ def main() -> None:
                 args.out_dir
             )
         case 'predict':
-            ...
+            predict(
+                args.dataset,
+                args.model
+            )
 
 if __name__ == '__main__':
     main()

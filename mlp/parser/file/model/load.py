@@ -8,7 +8,6 @@ from importlib import import_module
 import logging
 import json
 import sys
-import os
 
 import numpy as np
 
@@ -83,19 +82,18 @@ def _load_layer(layer_data: Dict[str, Any]) -> Layer:
     )
 
 
-def load_model(directory: str) -> Model:
+def load_model(path: str) -> Model:
     """
     Loads the model from a file.
 
     Args:
-        directory (str): The path to the model.
+        path (str): The path to the model.
 
     Returns:
         Model: The loaded model.
     """
 
     try:
-        path = os.path.join(directory, 'model.json')
         with open(path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 

@@ -24,7 +24,7 @@ from .model.regularizers import L1Regularizer, L2Regularizer
 from .model.training import EarlyStopping
 
 
-# pylint: disable=too-many-arguments, too-many-locals, unused-argument
+# pylint: disable=too-many-arguments, too-many-locals, unused-argument, disable=duplicate-code
 def train(
     dataset_path: str,
     layers: List[int],
