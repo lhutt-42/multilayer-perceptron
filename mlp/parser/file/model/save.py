@@ -10,8 +10,7 @@ import sys
 import os
 
 if TYPE_CHECKING:
-    from ....model.models import Model
-    from ....model.layers import Layer
+    from . import Model, Layer
 
 
 def _type_to_str(argument: Any) -> str | None:
