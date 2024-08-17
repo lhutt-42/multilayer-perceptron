@@ -14,7 +14,8 @@ class BinaryCrossEntropyLoss(Loss):
     Binary cross-entropy loss function.
     """
 
-    def forward(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def forward(y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         """
         Computes the loss using binary cross-entropy.
 
@@ -34,7 +35,8 @@ class BinaryCrossEntropyLoss(Loss):
         return -np.mean(positive_loss + negative_loss)
 
 
-    def backward(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def backward(y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         """
         Computes the gradient of the loss using binary cross-entropy.
 

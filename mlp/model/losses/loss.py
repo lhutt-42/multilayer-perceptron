@@ -10,7 +10,8 @@ class Loss:
     Interface for loss functions.
     """
 
-    def forward(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def forward(y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         """
         Computes the loss.
 
@@ -25,7 +26,8 @@ class Loss:
         raise NotImplementedError
 
 
-    def backward(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def backward(y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         """
         Computes the gradient of the loss.
 

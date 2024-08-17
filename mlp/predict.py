@@ -43,6 +43,5 @@ def predict(
     accuracy = AccuracyMetrics.calculate_accuracy(y, y_pred)
     logging.info('Model Accuracy: %.4f', accuracy)
 
-    bce = BinaryCrossEntropyLoss()
-    loss = bce.forward(y, y_pred)
+    loss = BinaryCrossEntropyLoss.forward(y, y_pred)
     logging.info('Model Loss: %.4f', loss)
