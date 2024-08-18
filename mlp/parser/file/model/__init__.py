@@ -26,10 +26,12 @@ if TYPE_CHECKING:
     from ....model.training import EarlyStopping
 
 # pylint: disable=wrong-import-position
+from .load_new import load_new_model
 from .load_trained import load_trained_model
 from .save import save_model
 
 __all__ = [
+    'load_new_model',
     'load_trained_model',
     'save_model'
 ]
