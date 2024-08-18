@@ -26,6 +26,8 @@ class XavierInitializer(Initializer):
             np.ndarray: The initialized values.
         """
 
+        print(shape)
+
         fan_in, fan_out = shape[0], shape[1]
         stddev = np.sqrt(2.0 / (fan_in + fan_out))
         return np.random.normal(0, stddev, size=shape)

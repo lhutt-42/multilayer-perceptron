@@ -34,11 +34,7 @@ def main() -> None:
         case 'train':
             train(
                 args.dataset,
-                args.layers,
-                args.epochs,
-                args.batch_size,
-                args.learning_rate,
-                args.loss,
+                args.model,
                 args.out_dir
             )
         case 'predict':

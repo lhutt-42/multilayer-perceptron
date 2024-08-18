@@ -29,6 +29,7 @@ class Model:
     def __init__(self, *args, **kwargs) -> None:
         self.layers: List[Layer] = []
         self.input_size: int | None = None
+        self.output_size: int | None = None
 
         self.loss: Loss | None = None
         self.metrics: Metrics | None = None
@@ -78,9 +79,10 @@ class Model:
             gradient = layer.backward(gradient)
 
 
-    def _initialize_layers(
+    def initialize(
         self,
         input_size: int,
+        output_size: int,
         optimizer: Optional[Optimizer] = None
     ) -> None:
         """
@@ -88,16 +90,23 @@ class Model:
 
         Args:
             input_size (int): The size of the input.
+            output_size (int): The size of the output.
             optimizer (Optimizer): The optimizer to use.
         """
 
         self.input_size = input_size
+        self.output_size = output_size
 
         for i, layer in enumerate(self.layers):
-            if i == 0:
-                layer.initialize(self.input_size)
-            else:
-                layer.initialize(self.layers[i - 1].layer_size)
+            match layer.layer_size:
+                case 'input':
+                    layer.layer_size = input_size
+                    layer.initialize(input_size)
+                case 'output':
+                    layer.layer_size = output_size
+                    layer.initialize(self.layers[i - 1].layer_size)
+                case _:
+                    layer.initialize(self.layers[i - 1].layer_size)
 
             if optimizer is not None and layer.optimizer is None:
                 layer.optimizer = deepcopy(optimizer)
@@ -138,7 +147,6 @@ class Model:
         epochs: int,
         *args,
         loss: Loss = BinaryCrossEntropyLoss,
-        optimizer: Optional[Optimizer] = None,
         early_stopping: Optional[EarlyStopping] = None,
         **kwargs
      ) -> None:
@@ -152,7 +160,6 @@ class Model:
             y_test (np.ndarray): The target data for validation.
             epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
-            optimizer (Optimizer): The optimizer to use.
             early_stopping (EarlyStopping): The early stopping.
         """
 

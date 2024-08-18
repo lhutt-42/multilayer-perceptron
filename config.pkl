@@ -8,8 +8,9 @@ import "pkl/model/Optimizers.pkl"
 import "pkl/model/Regularizers.pkl"
 import "pkl/model/Training.pkl"
 
+
 model = new Models.BatchModel {
-    epochs = 10
+    epochs = 15000
     optimizer = new Optimizers.AdamOptimizer {
         learning_rate = 0.001
         beta1 = 0.9

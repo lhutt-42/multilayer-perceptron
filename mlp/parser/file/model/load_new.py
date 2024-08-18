@@ -100,13 +100,13 @@ def load_new_model(path: str) -> Tuple[
 
     return (
         model,
-        config.epochs,
+        config.model.epochs,
         load_optimizer(
-            config.optimizer and config.optimizer.type,
-            config.optimizer
+            config.model.optimizer and config.model.optimizer.type,
+            config.model.optimizer
         ),
         load_early_stopping(
-            config.early_stopping
+            config.model.early_stopping
         ),
-        config.get('batch_size', None)
+        getattr(config.model, 'batch_size', None)
     )

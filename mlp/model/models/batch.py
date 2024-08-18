@@ -11,7 +11,6 @@ from .model import Model
 from . import (
     Loss,
     Metrics,
-    Optimizer,
     BinaryCrossEntropyLoss,
     EarlyStopping
 )
@@ -33,7 +32,6 @@ class BatchModel(Model):
         epochs: int,
         *args,
         loss: Loss = BinaryCrossEntropyLoss,
-        optimizer: Optional[Optimizer] = None,
         early_stopping: Optional[EarlyStopping] = None,
         **kwargs
      ) -> None:
@@ -47,15 +45,15 @@ class BatchModel(Model):
             y_val (np.ndarray): The target data for validation.
             epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
-            optimizer (Optimizer): The optimizer to use.
             early_stopping (EarlyStopping): The early stopping.
         """
+
+        if self.input_size is None or self.output_size is None:
+            raise ValueError('The model must be initialized before training.')
 
         logging.info('Training the model using batch training.')
 
         self.loss = loss
-        self._initialize_layers(x_train.shape[1], optimizer=optimizer)
-
         self.metrics = Metrics()
 
         for epoch in range(epochs):
