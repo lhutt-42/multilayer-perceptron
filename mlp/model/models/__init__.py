@@ -3,7 +3,7 @@ This module contains the models used in the neural network.
 """
 
 # pylint: disable=cyclic-import
-from ...parser.file.model import save_model, load_model
+from ...parser.file.model import save_model, load_trained_model
 
 from ..losses import Loss, BinaryCrossEntropyLoss
 from ..layers import Layer

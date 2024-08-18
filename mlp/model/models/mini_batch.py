@@ -12,7 +12,6 @@ from .model import Model
 from . import (
     Loss,
     Metrics,
-    Optimizer,
     BinaryCrossEntropyLoss,
     EarlyStopping
 )
@@ -32,8 +31,8 @@ class MiniBatchModel(Model):
         x_test: np.ndarray,
         y_test: np.ndarray,
         epochs: int,
+        *args,
         loss: Loss = BinaryCrossEntropyLoss,
-        optimizer: Optional[Optimizer] = None,
         early_stopping: Optional[EarlyStopping] = None,
         batch_size: int = 32,
         **kwargs
@@ -48,16 +47,16 @@ class MiniBatchModel(Model):
             y_test (np.ndarray): The target data for validation.
             epochs (int): The number of epochs to train the model.
             loss (Loss): The loss function to use.
-            optimizer (Optimizer): The optimizer to use.
             early_stopping (EarlyStopping): The early stopping.
             batch_size (int): The batch size used during training.
         """
 
+        if self.input_size is None or self.output_size is None:
+            raise ValueError('The model must be initialized before training.')
+
         logging.info('Training the model using mini-batch training.')
 
         self.loss = loss
-        self._initialize_layers(x_train.shape[1], optimizer=optimizer)
-
         self.metrics = Metrics()
 
         batch_zip = cycle(zip(x_train, y_train))

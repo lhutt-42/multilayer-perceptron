@@ -1,0 +1,21 @@
+typealias InitializerType = "HeInitializer" | "RandomInitializer" | "XavierInitializer" | "ZeroInitializer"
+
+abstract class Initializer {
+    const type: InitializerType
+}
+
+class HeInitializer extends Initializer {
+    const type: InitializerType = "HeInitializer"
+}
+
+class RandomInitializer extends Initializer {
+    const type: InitializerType = "RandomInitializer"
+}
+
+class XavierInitializer extends Initializer {
+    const type: InitializerType = "XavierInitializer"
+}
+
+class ZeroInitializer extends Initializer {
+    const type: InitializerType = "ZeroInitializer"
+}

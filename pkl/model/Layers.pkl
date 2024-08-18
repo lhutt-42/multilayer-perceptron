@@ -1,0 +1,26 @@
+module Layer
+
+import "Activations.pkl"
+import "Initializers.pkl"
+import "Optimizers.pkl"
+import "Regularizers.pkl"
+
+typealias LayerType = "DenseLayer"
+typealias LayerSize = "input" | "output" | Int(isPositive)
+
+abstract class Layer {
+    const type: LayerType
+    layer_size: LayerSize
+
+    activation: Activations.Activation
+    weight_initializer: Initializers.Initializer
+    bias_initializer: Initializers.Initializer
+
+    optimizer: Optimizers.Optimizer?
+    regularizer: Regularizers.Regularizer?
+    gradient_clipping: Float(isPositive)? = 1.0
+}
+
+class DenseLayer extends Layer {
+    const type: LayerType = "DenseLayer"
+}

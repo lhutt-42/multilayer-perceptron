@@ -1,0 +1,35 @@
+module Model
+
+import "Layers.pkl"
+import "Optimizers.pkl"
+import "Training.pkl"
+
+typealias ModelType = "BatchModel" | "MiniBatchModel"
+
+abstract class Model {
+    const type: ModelType
+    epochs: Int(isPositive)
+
+    optimizer: Optimizers.Optimizer
+    early_stopping: Training.EarlyStopping?
+
+    layers: Listing<Layers.Layer>(checkLayersSize)
+
+    hidden checkLayersSize = (layers: Listing<Layers.Layer>) ->
+        if (layers.length < 2)
+            throw("The model must have at least 2 layers")
+        else if (layers[0].layer_size != "input")
+            throw("The first layer must be an input layer")
+        else if (layers[layers.length - 1].layer_size != "output")
+            throw("The last layer must be an output layer")
+        else true
+}
+
+class BatchModel extends Model {
+    const type: ModelType = "BatchModel"
+}
+
+class MiniBatchModel extends Model {
+    const type: ModelType = "MiniBatchModel"
+    batch_size: Int(isPositive)
+}

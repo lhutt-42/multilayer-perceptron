@@ -13,6 +13,11 @@ class Initializer:
     Interface for initializers.
     """
 
+    # pylint: disable=unused-argument
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
     def __call__(self, shape: Tuple[int, int]) -> np.ndarray:
         """
         Initializes the values.

@@ -10,15 +10,9 @@ class Regularizer:
     Regularizers interface.
     """
 
-    def __init__(self, l: float = 0.01) -> None:
-        """
-        Initializes the regularizer.
-
-        Args:
-            l (float): The regularization parameter.
-        """
-
-        self.l = l
+    # pylint: disable=unused-argument
+    def __init__(self, *args, **kwargs) -> None:
+        pass
 
 
     def penalty(self, values: np.ndarray) -> np.ndarray:

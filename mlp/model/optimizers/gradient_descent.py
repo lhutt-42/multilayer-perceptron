@@ -15,7 +15,13 @@ class GradientDescentOptimizer(Optimizer):
     Gradient descent optimizer.
     """
 
-    def __init__(self, learning_rate: float) -> None:
+    # pylint: disable=unused-argument
+    def __init__(
+        self,
+        *args,
+        learning_rate: float = 0.001,
+        **kwargs
+    ) -> None:
         """
         Initializes the optimizer.
 
@@ -23,6 +29,7 @@ class GradientDescentOptimizer(Optimizer):
             learning_rate (float): The learning rate.
         """
 
+        super().__init__()
         self.learning_rate = learning_rate
 
 

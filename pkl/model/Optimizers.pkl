@@ -1,0 +1,18 @@
+typealias OptimizerType = "AdamOptimizer" | "GradientDescentOptimizer"
+
+abstract class Optimizer {
+    const type: OptimizerType
+    learning_rate: Float(isPositive)? = 0.001
+}
+
+class AdamOptimizer extends Optimizer {
+    const type: OptimizerType = "AdamOptimizer"
+    learning_rate: Float(isPositive)? = 0.001
+    beta1: Float(isPositive)? = 0.9
+    beta2: Float(isPositive)? = 0.999
+}
+
+class GradientDescentOptimizer extends Optimizer {
+    const type: OptimizerType = "GradientDescentOptimizer"
+    learning_rate: Float(isPositive)? = 0.001
+}

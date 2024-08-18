@@ -1,0 +1,17 @@
+typealias ActivationType = "ReluActivation" | "SigmoidActivation" | "SoftmaxActivation"
+
+abstract class Activation {
+    const type: ActivationType
+}
+
+class ReluActivation extends Activation {
+    const type: ActivationType = "ReluActivation"
+}
+
+class SigmoidActivation extends Activation {
+    const type: ActivationType = "SigmoidActivation"
+}
+
+class SoftmaxActivation extends Activation {
+    const type: ActivationType = "SoftmaxActivation"
+}

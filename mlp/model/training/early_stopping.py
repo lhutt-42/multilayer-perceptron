@@ -15,7 +15,14 @@ class EarlyStopping:
     Early stopping class.
     """
 
-    def __init__(self, patience: int = 1000, delta: float = 0.0):
+    # pylint: disable=unused-argument
+    def __init__(
+        self,
+        *args,
+        patience: int = 1000,
+        delta: float = 0.0,
+        **kwargs
+    ) -> None:
         """
         Initializes the early stopping.
 

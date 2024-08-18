@@ -10,6 +10,11 @@ class Activation:
     Interface for activation functions.
     """
 
+    # pylint: disable=unused-argument
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
     def __call__(self, x: np.ndarray) -> np.ndarray:
         """
         Applies the activation function to the input.
