@@ -1,0 +1,59 @@
+amends "pkl/AppConfig.pkl"
+
+import "pkl/model/Activations.pkl"
+import "pkl/model/Initializers.pkl"
+import "pkl/model/Layers.pkl"
+import "pkl/model/Models.pkl"
+import "pkl/model/Optimizers.pkl"
+import "pkl/model/Regularizers.pkl"
+import "pkl/model/Training.pkl"
+
+model = new Models.BatchModel {
+    epochs = 10
+    optimizer = new Optimizers.AdamOptimizer {
+        learning_rate = 0.001
+        beta1 = 0.9
+        beta2 = 0.999
+    }
+    early_stopping = new Training.EarlyStopping {
+        patience = 1000
+        delta = 0.0
+    }
+    layers {
+        new Layers.DenseLayer {
+            layer_size = "input"
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+            regularizer = new Regularizers.L1Regularizer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = 18
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+            regularizer = new Regularizers.L2Regularizer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = 12
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+            regularizer = new Regularizers.L2Regularizer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = 6
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+            regularizer = new Regularizers.L2Regularizer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = "output"
+            activation = new Activations.SoftmaxActivation {}
+            weight_initializer = new Initializers.HeInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+            regularizer = null
+        }
+    }
+}

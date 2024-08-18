@@ -1,0 +1,15 @@
+typealias RegularizerType = "L1Regularizer" | "L2Regularizer"
+
+abstract class Regularizer {
+    const type: RegularizerType
+}
+
+class L1Regularizer extends Regularizer {
+    const type: RegularizerType = "L1Regularizer"
+    l: Float(isPositive) = 0.01
+}
+
+class L2Regularizer extends Regularizer {
+    const type: RegularizerType = "L2Regularizer"
+    l: Float(isPositive) = 0.01
+}

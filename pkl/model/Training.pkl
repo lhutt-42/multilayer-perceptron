@@ -1,0 +1,4 @@
+class EarlyStopping {
+    patience: Int(isPositive) = 1000;
+    delta: Float(isPositive) = 0.0;
+}
