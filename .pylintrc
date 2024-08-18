@@ -82,7 +82,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint.extensions.bad_builtin
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -145,6 +145,8 @@ bad-names=foo,
 # Bad variable names regexes, separated by a comma. If names match any regex,
 # they will always be refused
 bad-names-rgxs=
+
+bad-functions=print,exec,eval,apply,input
 
 # Naming style matching correct class attribute names.
 class-attribute-naming-style=any
