@@ -16,7 +16,7 @@ from . import (
     BinaryCrossEntropyLoss,
     EarlyStopping,
     save_model,
-    load_model
+    load_trained_model
 )
 
 
@@ -193,4 +193,4 @@ class Model:
             path (str): The path to the model.
         """
 
-        return load_model(path)
+        return load_trained_model(path)
