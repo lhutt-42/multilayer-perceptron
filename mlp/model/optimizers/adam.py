@@ -17,11 +17,14 @@ class AdamOptimizer(Optimizer):
     Adam optimizer.
     """
 
+    # pylint: disable=unused-argument
     def __init__(
         self,
+        *args,
         learning_rate: float = 0.001,
         beta1: float = 0.9,
         beta2: float = 0.999,
+        **kwargs
     ) -> None:
         """
         Initializes the optimizer.
@@ -32,6 +35,7 @@ class AdamOptimizer(Optimizer):
             beta2 (float): The exponential decay rate for the second moment estimates.
         """
 
+        super().__init__()
         self.learning_rate = learning_rate
         self.beta1 = beta1
         self.beta2 = beta2

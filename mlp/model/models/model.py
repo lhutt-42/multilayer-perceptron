@@ -25,7 +25,8 @@ class Model:
     Model class.
     """
 
-    def __init__(self) -> None:
+    # pylint: disable=unused-argument
+    def __init__(self, *args, **kwargs) -> None:
         self.layers: List[Layer] = []
         self.input_size: int | None = None
 
@@ -135,6 +136,7 @@ class Model:
         x_test: np.ndarray,
         y_test: np.ndarray,
         epochs: int,
+        *args,
         loss: Loss = BinaryCrossEntropyLoss,
         optimizer: Optional[Optimizer] = None,
         early_stopping: Optional[EarlyStopping] = None,

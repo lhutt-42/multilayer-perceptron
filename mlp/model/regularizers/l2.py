@@ -12,6 +12,24 @@ class L2Regularizer(Regularizer):
     L2 Regularizer.
     """
 
+    # pylint: disable=unused-argument
+    def __init__(
+        self,
+        *args,
+        l: float = 0.01,
+        **kwargs
+    ) -> None:
+        """
+        Initializes the regularizer.
+
+        Args:
+            l (float): The regularization parameter.
+        """
+
+        super().__init__()
+        self.l = l
+
+
     def penalty(self, values: np.ndarray) -> np.ndarray:
         """
         Computes the penalty term for the L2 regularizer.

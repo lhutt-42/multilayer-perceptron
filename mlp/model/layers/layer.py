@@ -21,11 +21,12 @@ class Layer:
     Interface for layers.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments, disable=unused-argument
     def __init__(
         self,
         layer_size: int,
         activation: Activation,
+        *args,
         weight_initializer: Initializer = ZeroInitializer(),
         bias_initializer: Initializer = ZeroInitializer(),
         optimizer: Optional[Optimizer] = None,
@@ -33,6 +34,7 @@ class Layer:
         gradient_clipping: Optional[float] = 1.0,
         weights: Optional[np.ndarray] = None,
         biases: Optional[np.ndarray] = None,
+        **kwargs
     ) -> None:
         """
         Initializes the layer.

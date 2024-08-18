@@ -13,6 +13,11 @@ class Optimizer:
     Interface for optimizers.
     """
 
+    # pylint: disable=unused-argument
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
     def update(
         self,
         weights: np.ndarray,
