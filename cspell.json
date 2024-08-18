@@ -6,7 +6,8 @@
         ".gitignore",
         ".github/workflows/*",
         "requirements.txt",
-        "data/*"
+        "data/*",
+        "pkl/"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
