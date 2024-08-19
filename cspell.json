@@ -28,7 +28,8 @@
         "ylabel",
         "linestyle",
         "figsize",
-        "levelname"
+        "levelname",
+        "srcset"
     ],
     "ignoreWords": [],
     "import": []
