@@ -9,7 +9,7 @@ from typing import List
 from sklearn.model_selection import train_test_split
 
 # pylint: disable=unused-import
-from .parser.file.dataset import read_dataset
+from .parser.file.dataset import load_dataset
 from .parser.file.model import load_new_model
 
 from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
@@ -66,7 +66,7 @@ def train(
         out_dir (str): The output directory.
     """
 
-    df = read_dataset(dataset_path)
+    df = load_dataset(dataset_path)
 
     if df.empty or len(df.columns) < 3:
         logging.error('The dataset does not match the excepted format.')

@@ -6,7 +6,7 @@ import os
 
 from sklearn.model_selection import train_test_split
 
-from .parser.file import read_dataset, save_dataset
+from .parser.file import load_dataset, save_dataset
 
 
 def split(dataset_path: str, test_size: float, out_dir: str) -> None:
@@ -19,7 +19,7 @@ def split(dataset_path: str, test_size: float, out_dir: str) -> None:
         out_dir (str): The output directory.
     """
 
-    dataset = read_dataset(dataset_path)
+    dataset = load_dataset(dataset_path)
     train, test = train_test_split(dataset, test_size=test_size)
 
     save_dataset(train,  os.path.join(out_dir, 'train.csv'))

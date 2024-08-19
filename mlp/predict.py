@@ -5,7 +5,7 @@ This module contains the training logic for the model.
 import sys
 import logging
 
-from .parser.file.dataset import read_dataset
+from .parser.file.dataset import load_dataset
 from .model.losses import BinaryCrossEntropyLoss
 from .model.metrics import AccuracyMetrics
 from .model.models import Model
@@ -25,7 +25,7 @@ def predict(
         model_path (str): The path to the model.
     """
 
-    df = read_dataset(dataset_path)
+    df = load_dataset(dataset_path)
 
     if df.empty or len(df.columns) < 3:
         logging.error('The dataset does not match the excepted format.')

@@ -1,13 +1,15 @@
 """
-This module contains the functions to interact with files.
+This module contains the functions to save and load datasets.
 """
 
+import os
 import sys
 import logging
 
 import pandas as pd
 
-def read_dataset(path: str) -> pd.DataFrame:
+
+def load_dataset(path: str) -> pd.DataFrame:
     """
     Reads the dataset from a CSV file.
 
@@ -49,6 +51,7 @@ def save_dataset(dataset: pd.DataFrame, path: str) -> None:
     """
 
     try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         dataset.to_csv(path, index=False, header=False)
 
     except (PermissionError, IsADirectoryError) as e:
