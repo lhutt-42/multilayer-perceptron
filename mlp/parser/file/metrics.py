@@ -37,6 +37,10 @@ def discover_metrics(directory: str, n: int) -> List[str]:
             os.path.join(directory, file) for file in files[:n]
         ]
 
+    except (FileNotFoundError, PermissionError, IsADirectoryError) as exception:
+        logging.warning('No metrics available: %s', exception)
+        return []
+
     # pylint: disable=broad-except
     except Exception as exception:
         logging.error('An error occurred while discovering metrics: %s', exception)
