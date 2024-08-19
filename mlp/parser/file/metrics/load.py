@@ -1,10 +1,9 @@
 """
-This module provides functions to save and load metrics to and from a file.
+This module provides functions to load metrics from a file.
 """
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
-from datetime import datetime
 import logging
 import json
 import sys
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
     from . import Metrics
 
 
-def discover_metrics(directory: str, n: int) -> List[str]:
+def _discover_metrics(directory: str, n: int) -> List[str]:
     """
     Discovers the n latest metrics files in the specified directory.
 
@@ -37,13 +36,17 @@ def discover_metrics(directory: str, n: int) -> List[str]:
             os.path.join(directory, file) for file in files[:n]
         ]
 
+    except (FileNotFoundError, PermissionError, IsADirectoryError) as exception:
+        logging.warning('No metrics available: %s', exception)
+        return []
+
     # pylint: disable=broad-except
     except Exception as exception:
         logging.error('An error occurred while discovering metrics: %s', exception)
         sys.exit(1)
 
 
-def load_metric(path: str) -> Metrics:
+def _load_metric(path: str) -> Metrics:
     """
     Loads metrics from the provided file path.
 
@@ -55,7 +58,12 @@ def load_metric(path: str) -> Metrics:
     """
 
     # pylint: disable=import-outside-toplevel
-    from . import Metrics, LossMetrics, AccuracyMetrics, PrecisionMetrics
+    from ....model.metrics import (
+        Metrics,
+        LossMetrics,
+        AccuracyMetrics,
+        PrecisionMetrics
+    )
 
     try:
         with open(path, 'r', encoding='utf-8') as file:
@@ -100,51 +108,8 @@ def load_metrics(directory: str, n: int) -> List[Metrics]:
         List[Metrics]: A list of Metrics objects loaded from the directory.
     """
 
-    files = discover_metrics(directory, n)
+    files = _discover_metrics(directory, n)
 
     return [
-        load_metric(file) for file in files
+        _load_metric(file) for file in files
     ]
-
-
-def save_metrics(metrics: Metrics, directory: str) -> None:
-    """
-    Saves the metrics to a file.
-
-    Args:
-        metrics (Metrics): The metrics to save.
-        directory (str): The path to save the metrics.
-    """
-
-    metrics_data = {
-        'loss': {
-            'train': metrics.loss.train_values,
-            'test': metrics.loss.test_values
-        },
-        'accuracy': {
-            'train': metrics.accuracy.train_values,
-            'test': metrics.accuracy.test_values
-        },
-        'precision': {
-            'train': metrics.precision.train_values,
-            'test': metrics.precision.test_values
-        }
-    }
-
-    try:
-        os.makedirs(directory, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        path = os.path.join(directory, f'metrics_{timestamp}.json')
-
-        with open(path, 'w', encoding='utf-8') as file:
-            logging.debug('Saving the metrics to %s', path)
-            json.dump(metrics_data, file)
-
-    except (PermissionError, IsADirectoryError) as exception:
-        logging.error('An error occurred while saving the metrics: %s', exception)
-        sys.exit(1)
-
-    # pylint: disable=broad-except
-    except Exception as exception:
-        logging.error('An error occurred while saving the metrics: %s', exception)
-        sys.exit(1)

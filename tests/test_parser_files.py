@@ -3,12 +3,12 @@ This module contains the tests for the Parser class.
 """
 
 import unittest
-from unittest.mock import patch, mock_open, call
+from unittest.mock import patch, mock_open, call, Mock
 
 import pandas as pd
 import pandas.testing as pd_testing
 
-from mlp.parser.file import read_dataset, save_dataset
+from mlp.parser.file import load_dataset, save_dataset
 
 
 class TestParserFiles(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestParserFiles(unittest.TestCase):
         """
 
         with self.assertRaises(SystemExit) as cm:
-            read_dataset('test.csv')
+            load_dataset('test.csv')
 
         self.assertEqual(cm.exception.code, 1)
 
@@ -35,7 +35,7 @@ class TestParserFiles(unittest.TestCase):
         """
 
         with self.assertRaises(SystemExit) as cm:
-            read_dataset('test.csv')
+            load_dataset('test.csv')
 
         self.assertEqual(cm.exception.code, 1)
 
@@ -46,7 +46,7 @@ class TestParserFiles(unittest.TestCase):
         Test the case when the model is read correctly.
         """
 
-        df = read_dataset('test.csv')
+        df = load_dataset('test.csv')
 
         pd_testing.assert_frame_equal(
             df,
@@ -69,8 +69,10 @@ class TestParserFiles(unittest.TestCase):
         self.assertEqual(cm.exception.code, 1)
 
 
+    # pylint: disable=unused-argument
+    @patch('os.makedirs', new_callable=Mock)
     @patch('builtins.open', new_callable=mock_open)
-    def test_save_dataset_success(self, mock_file):
+    def test_save_dataset_success(self, mock_file, *args):
         """
         Test the case when the model is saved correctly.
         """
