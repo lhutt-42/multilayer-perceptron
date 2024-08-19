@@ -7,7 +7,8 @@
         ".github/workflows/*",
         "requirements.txt",
         "data/*",
-        "pkl/"
+        "pkl/",
+        "assets/"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
