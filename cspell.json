@@ -30,7 +30,11 @@
         "linestyle",
         "figsize",
         "levelname",
-        "srcset"
+        "srcset",
+        "mathbf",
+        "mathcal",
+        "backpropagation",
+        "overfitting"
     ],
     "ignoreWords": [],
     "import": []
