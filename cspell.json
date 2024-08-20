@@ -7,7 +7,8 @@
         ".github/workflows/*",
         "requirements.txt",
         "data/*",
-        "pkl/"
+        "pkl/",
+        "assets/"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -28,7 +29,12 @@
         "ylabel",
         "linestyle",
         "figsize",
-        "levelname"
+        "levelname",
+        "srcset",
+        "mathbf",
+        "mathcal",
+        "backpropagation",
+        "overfitting"
     ],
     "ignoreWords": [],
     "import": []
