@@ -2,6 +2,9 @@
 The module contains the model logic for the neural network.
 """
 
+# pylint: disable=cyclic-import
+from ..logger import logger
+
 from . import activations
 from . import initializers
 from . import layers

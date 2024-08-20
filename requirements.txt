@@ -1,6 +1,7 @@
 astroid==3.2.4
 certifi==2024.7.4
 charset-normalizer==3.3.2
+colorama==0.4.6
 contourpy==1.2.1
 cycler==0.12.1
 dill==0.3.8

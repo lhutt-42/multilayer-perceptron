@@ -5,11 +5,11 @@ This module provides functions to load the model from a json file.
 from __future__ import annotations
 import sys
 import json
-import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
+from . import logger
 from . import (
     load_activation,
     load_initializer,
@@ -92,7 +92,7 @@ def load_trained_model(path: str) -> Model:
     """
 
     try:
-        logging.info('Loading configuration file.')
+        logger.info('Loading trained model from `%s`', path)
         with open(path, 'r', encoding='utf-8') as file:
             data = json.load(file)
             if data is None:
@@ -111,17 +111,18 @@ def load_trained_model(path: str) -> Model:
                 _load_layer(layer_data) for layer_data in data['layers']
             ])
 
+            logger.info('Model loaded from %s', path)
             return model
 
     except (ValueError, AttributeError, ImportError) as exception:
-        logging.error('An error occurred while loading the model: %s', exception)
+        logger.error('An error occurred while loading the model: %s', exception)
         sys.exit(1)
 
     except (FileNotFoundError, PermissionError, IsADirectoryError) as exception:
-        logging.error('An error occurred while loading the model: %s', exception)
+        logger.error('An error occurred while loading the model: %s', exception)
         sys.exit(1)
 
     #pylint: disable=broad-except
     except Exception as exception:
-        logging.error('An error occurred while loading the model: %s', exception)
+        logger.error('An error occurred while loading the model: %s', exception)
         sys.exit(1)

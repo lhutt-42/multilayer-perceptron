@@ -4,10 +4,11 @@ This module provides functions to load metrics from a file.
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
-import logging
 import json
 import sys
 import os
+
+from . import logger
 
 if TYPE_CHECKING:
     from . import Metrics
@@ -37,12 +38,12 @@ def _discover_metrics(directory: str, n: int) -> List[str]:
         ]
 
     except (FileNotFoundError, PermissionError, IsADirectoryError) as exception:
-        logging.warning('No metrics available: %s', exception)
+        logger.warning('No metrics available: %s', exception)
         return []
 
     # pylint: disable=broad-except
     except Exception as exception:
-        logging.error('An error occurred while discovering metrics: %s', exception)
+        logger.error('An error occurred while discovering metrics: %s', exception)
         sys.exit(1)
 
 
@@ -66,6 +67,7 @@ def _load_metric(path: str) -> Metrics:
     )
 
     try:
+        logger.info('Loading metrics from `%s`', path)
         with open(path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
@@ -87,12 +89,12 @@ def _load_metric(path: str) -> Metrics:
             return metrics
 
     except (FileNotFoundError, PermissionError, IsADirectoryError) as exception:
-        logging.error('An error occurred while loading metrics: %s', exception)
+        logger.error('An error occurred while loading metrics: %s', exception)
         sys.exit(1)
 
     # pylint: disable=broad-except
     except Exception as exception:
-        logging.error('An error occurred while loading metrics: %s', exception)
+        logger.error('An error occurred while loading metrics: %s', exception)
         sys.exit(1)
 
 

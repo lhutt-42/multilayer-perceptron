@@ -2,6 +2,9 @@
 This module contains the functions to save and load metrics.
 """
 
+# pylint: disable=cyclic-import
+from .. import logger
+
 # pylint: disable=wrong-import-order
 from typing import TYPE_CHECKING
 

@@ -3,13 +3,13 @@ This module contains the plotting logic.
 """
 
 import sys
-import logging
 from typing import List, Dict
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from scipy.ndimage import gaussian_filter1d
 
+from . import logger
 from . import Data
 
 
@@ -123,5 +123,5 @@ class Plot:
         except KeyboardInterrupt:
             pass
         except (RuntimeError, ValueError) as e:
-            logging.error('Could not render the plot: %s', e)
+            logger.error('Could not render the plot: %s', e)
             sys.exit(1)

@@ -4,10 +4,10 @@ Model class.
 
 from copy import deepcopy
 from typing import List, Optional
-import logging
 
 import numpy as np
 
+from . import logger
 from . import (
     Layer,
     Loss,
@@ -133,7 +133,7 @@ class Model:
 
         early_stopping.restore_weights(self.layers)
         self.metrics.log(epoch)
-        logging.info('Early stopping the model at epoch %d.', epoch)
+        logger.info('Early stopping the model at epoch %d.', epoch)
 
         return True
 

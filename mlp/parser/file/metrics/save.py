@@ -5,10 +5,11 @@ This module provides functions to save metrics to a file.
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from datetime import datetime
-import logging
 import json
 import sys
 import os
+
+from . import logger
 
 if TYPE_CHECKING:
     from . import Metrics
@@ -44,14 +45,14 @@ def save_metrics(metrics: Metrics, directory: str) -> None:
         path = os.path.join(directory, f'metrics_{timestamp}.json')
 
         with open(path, 'w', encoding='utf-8') as file:
-            logging.debug('Saving the metrics to %s', path)
             json.dump(metrics_data, file)
+            logger.info('Saved the metrics to `%s`', path)
 
     except (PermissionError, IsADirectoryError) as exception:
-        logging.error('An error occurred while saving the metrics: %s', exception)
+        logger.error('An error occurred while saving the metrics: %s', exception)
         sys.exit(1)
 
     # pylint: disable=broad-except
     except Exception as exception:
-        logging.error('An error occurred while saving the metrics: %s', exception)
+        logger.error('An error occurred while saving the metrics: %s', exception)
         sys.exit(1)

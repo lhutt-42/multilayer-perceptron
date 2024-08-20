@@ -3,11 +3,12 @@ This module contains the functions to normalize the data.
 """
 
 import sys
-import logging
 
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+
+from . import logger
 
 
 def normalize(df: pd.DataFrame) -> np.ndarray:
@@ -26,5 +27,5 @@ def normalize(df: pd.DataFrame) -> np.ndarray:
         return StandardScaler().fit_transform(df)
 
     except (KeyError, ValueError) as e:
-        logging.error('Could not normalize the values: %s', e)
+        logger.error('Could not normalize the values: %s', e)
         sys.exit(1)
