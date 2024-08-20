@@ -4,13 +4,13 @@ This module provides functions to load the model from a pkl file.
 
 from __future__ import annotations
 import sys
-import logging
 from time import perf_counter
 from typing import TYPE_CHECKING, Optional, Tuple
 
 import pkl
 from pkl.utils import PklError
 
+from . import logger
 from . import (
     load_activation,
     load_initializer,
@@ -50,18 +50,18 @@ def load_new_model(path: str) -> Tuple[
         ]
     """
 
-    logging.info('Loading configuration file.')
+    logger.info('Loading the model from `%s`', path)
     start = perf_counter()
 
     try:
         config = pkl.load(path)
 
     except PklError as exception:
-        logging.error('Cannot load configuration file: %s', exception)
+        logger.error('Cannot load the model: %s', exception)
         sys.exit(1)
 
     end = perf_counter()
-    logging.info('Configuration loaded in %.2f seconds.', end - start)
+    logger.info('Model loaded in %.2f seconds.', end - start)
 
     model = load_model(
         config.model.type,

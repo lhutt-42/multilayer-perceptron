@@ -5,8 +5,8 @@ Class to store the metrics.
 from __future__ import annotations
 from typing import List, Optional
 import os
-import logging
 
+from . import logger
 from .loss import LossMetrics
 from .accuracy import AccuracyMetrics
 from .precision import PrecisionMetrics
@@ -72,7 +72,7 @@ class Metrics:
             epoch (int): The epoch.
         """
 
-        logging.info(
+        logger.info(
             'epoch %6d - '
             'train loss: %4f - '
             'test loss: %4f - '

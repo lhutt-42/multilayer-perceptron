@@ -2,18 +2,18 @@
 Model class with batch training.
 """
 
-import logging
 from typing import Optional
 
 import numpy as np
 
-from .model import Model
+from . import logger
 from . import (
     Loss,
     Metrics,
     BinaryCrossEntropyLoss,
     EarlyStopping
 )
+from .model import Model
 
 
 # pylint: disable=duplicate-code
@@ -51,7 +51,7 @@ class BatchModel(Model):
         if self.input_size is None or self.output_size is None:
             raise ValueError('The model must be initialized before training.')
 
-        logging.info('Training the model using batch training.')
+        logger.info('Training the model using batch training.')
 
         self.loss = loss
         self.metrics = Metrics()
@@ -74,4 +74,4 @@ class BatchModel(Model):
             if epoch % 1000 == 0:
                 self.metrics.log(epoch)
 
-        logging.info('Finished training the model.')
+        logger.info('Finished training the model.')

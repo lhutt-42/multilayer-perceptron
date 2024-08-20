@@ -27,7 +27,8 @@
         "xlabel",
         "ylabel",
         "linestyle",
-        "figsize"
+        "figsize",
+        "levelname"
     ],
     "ignoreWords": [],
     "import": []

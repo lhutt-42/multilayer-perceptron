@@ -2,8 +2,6 @@
 Main script of the project.
 """
 
-import logging
-
 import numpy as np
 
 from mlp.parser import create_parser
@@ -14,9 +12,6 @@ def main() -> None:
     """
     Main function of the script.
     """
-
-    logging.basicConfig(level=logging.DEBUG)
-    logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
     parser = create_parser()
     args = parser.parse_args()

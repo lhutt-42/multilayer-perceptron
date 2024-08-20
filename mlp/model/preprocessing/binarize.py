@@ -3,11 +3,12 @@ This module contains the functions to binarize the data.
 """
 
 import sys
-import logging
 
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
+
+from . import logger
 
 
 def binarize(ser: pd.Series) -> np.ndarray:
@@ -25,5 +26,5 @@ def binarize(ser: pd.Series) -> np.ndarray:
         return OneHotEncoder(sparse_output=False).fit_transform(ser.to_frame())
 
     except (KeyError, ValueError) as e:
-        logging.error('Could not binarize the values: %s', e)
+        logger.error('Could not binarize the values: %s', e)
         sys.exit(1)

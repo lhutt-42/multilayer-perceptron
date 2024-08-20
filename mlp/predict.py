@@ -3,8 +3,8 @@ This module contains the training logic for the model.
 """
 
 import sys
-import logging
 
+from .logger import logger
 from .parser.file.dataset import load_dataset
 from .model.losses import BinaryCrossEntropyLoss
 from .model.metrics import AccuracyMetrics
@@ -28,7 +28,7 @@ def predict(
     df = load_dataset(dataset_path)
 
     if df.empty or len(df.columns) < 3:
-        logging.error('The dataset does not match the excepted format.')
+        logger.error('The dataset does not match the excepted format.')
         sys.exit(1)
 
     # Drops the index column
@@ -41,7 +41,7 @@ def predict(
     y_pred = model.predict(x)
 
     accuracy = AccuracyMetrics.calculate_accuracy(y, y_pred)
-    logging.info('Model Accuracy: %.4f', accuracy)
+    logger.info('Model Accuracy: %.4f', accuracy)
 
     loss = BinaryCrossEntropyLoss.forward(y, y_pred)
-    logging.info('Model Loss: %.4f', loss)
+    logger.info('Model Loss: %.4f', loss)

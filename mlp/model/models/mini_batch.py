@@ -2,18 +2,18 @@
 Model class with mini-batch training.
 """
 
-import logging
 from typing import Optional, Iterator, Generator, List, Any
 
 import numpy as np
 
-from .model import Model
+from . import logger
 from . import (
     Loss,
     Metrics,
     BinaryCrossEntropyLoss,
     EarlyStopping
 )
+from .model import Model
 
 
 # pylint: disable=duplicate-code
@@ -79,7 +79,7 @@ class MiniBatchModel(Model):
         if self.input_size is None or self.output_size is None:
             raise ValueError('The model must be initialized before training.')
 
-        logging.info('Training the model using mini-batch training.')
+        logger.info('Training the model using mini-batch training.')
 
         self.loss = loss
         self.metrics = Metrics()
@@ -112,4 +112,4 @@ class MiniBatchModel(Model):
             if epoch % 100 == 0:
                 self.metrics.log(epoch)
 
-        logging.info('Finished training the model.')
+        logger.info('Finished training the model.')

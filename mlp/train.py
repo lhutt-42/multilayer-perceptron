@@ -3,12 +3,12 @@ This module contains the training logic for the model.
 """
 
 import sys
-import logging
 from typing import List
 
 from sklearn.model_selection import train_test_split
 
 # pylint: disable=unused-import
+from .logger import logger
 from .parser.file.dataset import load_dataset
 from .parser.file.model import load_new_model
 
@@ -69,7 +69,7 @@ def train(
     df = load_dataset(dataset_path)
 
     if df.empty or len(df.columns) < 3:
-        logging.error('The dataset does not match the excepted format.')
+        logger.error('The dataset does not match the excepted format.')
         sys.exit(1)
 
     # Drops the index column

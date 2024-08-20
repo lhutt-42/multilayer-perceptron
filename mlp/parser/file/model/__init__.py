@@ -2,6 +2,8 @@
 This module contains the functions to save and load models.
 """
 
+# pylint: disable=cyclic-import
+from .. import logger
 from ...modules import (
     load_activation,
     load_initializer,

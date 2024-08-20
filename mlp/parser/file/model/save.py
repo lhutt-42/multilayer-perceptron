@@ -4,10 +4,11 @@ This module provides functions to save the model to a file.
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Dict
-import logging
 import json
 import sys
 import os
+
+from . import logger
 
 if TYPE_CHECKING:
     from . import Model, Layer
@@ -60,14 +61,14 @@ def save_model(model: Model, directory: str) -> None:
         path = os.path.join(directory, 'model.json')
 
         with open(path, 'w', encoding='utf-8') as file:
-            logging.debug('Saving the model to %s', path)
             json.dump(model_data, file)
+            logger.info('Saved the model to `%s`', path)
 
     except (PermissionError, IsADirectoryError) as exception:
-        logging.error('An error occurred while saving the model: %s', exception)
+        logger.error('An error occurred while saving the model: %s', exception)
         sys.exit(1)
 
     # pylint: disable=broad-except
     except Exception as exception:
-        logging.error('An error occurred while saving the model: %s', exception)
+        logger.error('An error occurred while saving the model: %s', exception)
         sys.exit(1)
