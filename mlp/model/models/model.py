@@ -124,7 +124,7 @@ class Model:
             bool: True if the training should stop, False otherwise.
         """
 
-        if early_stopping is None:
+        if early_stopping is None or len(self.metrics.loss.test_values) == 0:
             return False
 
         test_loss = self.metrics.loss.test_values[-1]

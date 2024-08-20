@@ -3,8 +3,7 @@ Model class with mini-batch training.
 """
 
 import logging
-from typing import Optional
-from itertools import cycle, batched
+from typing import Optional, Iterator, Generator, List, Any
 
 import numpy as np
 
@@ -22,6 +21,32 @@ class MiniBatchModel(Model):
     """
     Model class with mini-batch training.
     """
+
+    @staticmethod
+    def batched(
+        iterable: Iterator[Any],
+        batch_size: int
+    ) -> Generator[List[Any], None, None]:
+        """
+        Custom generator that yields batches of a specified size.
+
+        Args:
+            iterable (Iterator): The iterator to batch.
+            batch_size (int): The size of each batch.
+
+        Yields:
+            List[Any]: A batch of items from the iterator.
+        """
+
+        batch = []
+        for item in iterable:
+            batch.append(item)
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+        if batch:
+            yield batch
+
 
     # pylint: disable=too-many-arguments, arguments-differ, too-many-locals
     def fit(
@@ -59,30 +84,32 @@ class MiniBatchModel(Model):
         self.loss = loss
         self.metrics = Metrics()
 
-        batch_zip = cycle(zip(x_train, y_train))
-        batch_cycle = batched(batch_zip, batch_size)
+        for epoch in range(epochs):
+            batch_zip = zip(x_train, y_train)
+            batch_cycle = self.batched(batch_zip, batch_size)
 
-        for (epoch, batch) in zip(range(epochs), batch_cycle):
-            x_batch, y_batch = zip(*batch)
+            for batch in batch_cycle:
+                x_batch, y_batch = zip(*batch)
 
-            x_batch = np.array(x_batch)
-            y_batch = np.array(y_batch)
+                x_batch = np.array(x_batch)
+                y_batch = np.array(y_batch)
 
-            train_output = self.forward(x_batch)
-            train_loss = self.loss.forward(y_batch, train_output)
-            self.metrics.add_train(y_true=y_batch, y_pred=train_output, loss=train_loss)
+                train_output = self.forward(x_batch)
+                gradient = loss.backward(y_batch, train_output)
+                self.backward(gradient)
 
-            gradient = loss.backward(y_batch, train_output)
-            self.backward(gradient)
+                if self._should_stop(epoch, early_stopping):
+                    return
+
+            train_output = self.forward(x_train)
+            train_loss = self.loss.forward(y_train, train_output)
+            self.metrics.add_train(y_true=y_train, y_pred=train_output, loss=train_loss)
 
             test_output = self.forward(x_test)
             test_loss = loss.forward(y_test, test_output)
             self.metrics.add_test(y_true=y_test, y_pred=test_output, loss=test_loss)
 
-            if self._should_stop(epoch, early_stopping):
-                break
-
-            if epoch % 1000 == 0:
+            if epoch % 100 == 0:
                 self.metrics.log(epoch)
 
         logging.info('Finished training the model.')
