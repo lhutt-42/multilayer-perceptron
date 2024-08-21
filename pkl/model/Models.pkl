@@ -18,8 +18,6 @@ abstract class Model {
     hidden checkLayersSize = (layers: Listing<Layers.Layer>) ->
         if (layers.length < 2)
             throw("The model must have at least 2 layers")
-        else if (layers[0].layer_size != "input")
-            throw("The first layer must be an input layer")
         else if (layers[layers.length - 1].layer_size != "output")
             throw("The last layer must be an output layer")
         else true

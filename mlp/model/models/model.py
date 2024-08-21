@@ -98,6 +98,9 @@ class Model:
         self.output_size = output_size
 
         for i, layer in enumerate(self.layers):
+            if i == 0 and layer.layer_size != 'input':
+                layer.initialize(input_size)
+
             match layer.layer_size:
                 case 'input':
                     layer.layer_size = input_size
@@ -106,7 +109,8 @@ class Model:
                     layer.layer_size = output_size
                     layer.initialize(self.layers[i - 1].layer_size)
                 case _:
-                    layer.initialize(self.layers[i - 1].layer_size)
+                    if i != 0:
+                        layer.initialize(self.layers[i - 1].layer_size)
 
             if optimizer is not None and layer.optimizer is None:
                 layer.optimizer = deepcopy(optimizer)
