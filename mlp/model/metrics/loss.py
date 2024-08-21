@@ -10,6 +10,15 @@ class LossMetrics(Data):
     Class to store the loss metrics.
     """
 
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Initializes the loss metrics class.
+        """
+
+        super().__init__(*args, **kwargs)
+        self.name = 'Loss'
+
+
     # pylint: disable=arguments-differ
     def add_train(self, loss: float, **kwargs) -> None:
         """

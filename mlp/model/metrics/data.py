@@ -10,10 +10,13 @@ class Data:
     Interface for the data classes.
     """
 
+    # pylint: disable=unused-argument
     def __init__(
         self,
+        *args,
         train_values: Optional[List[float]] = None,
-        test_values: Optional[List[float]] = None
+        test_values: Optional[List[float]] = None,
+        **kwargs
     ) -> None:
         """
         Initializes the data class.
@@ -23,6 +26,7 @@ class Data:
             test_values (List[float]): The validation values.
         """
 
+        self.name: str = 'Data'
         self.train_values: List[float] = train_values or []
         self.test_values: List[float] = test_values or []
 
