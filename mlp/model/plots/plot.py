@@ -96,9 +96,12 @@ class Plot:
         self.metrics[metric.name].append(metric)
 
 
-    def render(self) -> None:
+    def render(self, raw: bool = False) -> None:
         """
         Renders the plot.
+
+        Args:
+            raw (bool): Whether to render the raw data.
         """
 
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -111,12 +114,11 @@ class Plot:
                 test=Plot.fading_palette(len(metrics), Plot.PALETTES[i]['test'])
             )
 
-
         for (name, metrics) in self.metrics.items():
             for i, metric in enumerate(metrics):
                 train_color = self.palettes[name].train[i % len(self.palettes[name].train)]
                 ax.plot(
-                    metric.train_smoothed,
+                    raw and metric.train_raw or metric.train_smoothed,
                     label=f'{metric.name} Train' if i == 0 else None,
                     color=train_color,
                     alpha=min(1.0, 1.0 - i / len(metrics) + 0.2),
@@ -125,7 +127,7 @@ class Plot:
 
                 test_color = self.palettes[name].test[i % len(self.palettes[name].test)]
                 ax.plot(
-                    metric.test_smoothed,
+                    raw and metric.test_raw or metric.test_smoothed,
                     label=f'{metric.name} Test' if i == 0 else None,
                     color=test_color,
                     alpha=min(1.0, 1.0 - i / len(metrics) + 0.2),
