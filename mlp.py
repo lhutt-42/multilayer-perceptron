@@ -30,7 +30,10 @@ def main() -> None:
             train(
                 args.dataset,
                 args.model,
-                args.out_dir
+                args.out_dir,
+                args.plot_n,
+                args.plot_multi,
+                args.plot_raw
             )
         case 'predict':
             predict(
