@@ -7,22 +7,13 @@ from typing import List
 
 from sklearn.model_selection import train_test_split
 
-# pylint: disable=unused-import
 from .logger import logger
 from .parser.file.dataset import load_dataset
 from .parser.file.model import load_new_model
-
-from .model.activations import SigmoidActivation, SoftmaxActivation, ReluActivation
-from .model.initializers import RandomInitializer, ZeroInitializer, HeInitializer, XavierInitializer
-from .model.layers import DenseLayer
 from .model.losses import BinaryCrossEntropyLoss
 from .model.metrics import Metrics
-from .model.models import MiniBatchModel, BatchModel
-from .model.optimizers import GradientDescentOptimizer, AdamOptimizer
 from .model.plots import Plot
 from .model.preprocessing import binarize, normalize
-from .model.regularizers import L1Regularizer, L2Regularizer
-from .model.training import EarlyStopping
 
 
 def plot_metrics(
