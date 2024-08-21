@@ -86,9 +86,16 @@ class Plot:
             name=metric.name,
             train_raw=metric.train_values,
             test_raw=metric.test_values,
-            train_smoothed=gaussian_filter1d(metric.train_values, sigma=sigma),
-            test_smoothed=gaussian_filter1d(metric.test_values, sigma=sigma)
+            train_smoothed=[],
+            test_smoothed=[]
         )
+
+        try:
+            metric.train_smoothed = gaussian_filter1d(metric.train_raw, sigma=sigma)
+            metric.test_smoothed = gaussian_filter1d(metric.test_raw, sigma=sigma)
+        except ZeroDivisionError:
+            logger.warning('An error occurred while smoothing the data.')
+            return
 
         if self.metrics.get(metric.name) is None:
             self.metrics[metric.name] = []
