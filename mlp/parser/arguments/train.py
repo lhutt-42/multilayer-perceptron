@@ -31,3 +31,22 @@ def create_train_subparser(subparsers) -> None:
         default='./models',
         help='Output directory.'
     )
+
+    parser_train.add_argument(
+        '--plot-n',
+        type=int,
+        default=2,
+        help='Number of past metrics to plot.'
+    )
+
+    parser_train.add_argument(
+        '--plot-multi',
+        action='store_true',
+        help='Plot multiple metrics.'
+    )
+
+    parser_train.add_argument(
+        '--plot-raw',
+        action='store_true',
+        help='Plot the raw data.'
+    )

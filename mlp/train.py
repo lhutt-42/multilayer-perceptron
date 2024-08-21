@@ -25,7 +25,11 @@ from .model.regularizers import L1Regularizer, L2Regularizer
 from .model.training import EarlyStopping
 
 
-def plot_metrics(metrics: List[Metrics]) -> None:
+def plot_metrics(
+    metrics: List[Metrics],
+    plot_multi: bool = False,
+    plot_raw: bool = False
+) -> None:
     """
     Plots the metrics.
 
@@ -33,29 +37,48 @@ def plot_metrics(metrics: List[Metrics]) -> None:
         metrics (List[Metrics]): The metrics to plot.
     """
 
-    loss_plot = Plot('Loss')
-    for metric in metrics:
-        loss_plot.plot_data(metric.loss)
-    loss_plot.render()
+    def _plot_individual(metric_name: str) -> None:
+        plot = Plot(metric_name.capitalize())
 
-    accuracy_plot = Plot('Accuracy')
-    for metric in metrics:
-        accuracy_plot.plot_data(metric.accuracy)
-    accuracy_plot.render()
+        for metric in metrics:
+            data = getattr(metric, metric_name, None)
+            if data is None:
+                continue
+            plot.plot_data(data)
 
-    precision_plot = Plot('Precision')
-    for metric in metrics:
-        precision_plot.plot_data(metric.precision)
-    precision_plot.render()
-
-    Plot.show()
+        plot.render(raw=plot_raw)
 
 
-# pylint: disable=too-many-locals, disable=duplicate-code
+    if plot_multi is False:
+        _plot_individual('loss')
+        _plot_individual('accuracy')
+        _plot_individual('precision')
+
+        Plot.show()
+        return
+
+
+    if plot_multi:
+        plot = Plot()
+
+        for metric in metrics:
+            plot.plot_data(metric.loss)
+            plot.plot_data(metric.accuracy)
+            plot.plot_data(metric.precision)
+
+        plot.render(raw=plot_raw)
+
+        Plot.show()
+
+
+# pylint: disable=too-many-locals, disable=duplicate-code, too-many-arguments, unused-argument
 def train(
     dataset_path: str,
     model_path: str,
-    out_dir: str
+    out_dir: str,
+    plot_n: int,
+    plot_multi: bool,
+    plot_raw: bool
 ) -> None:
     """
     Trains the model.
@@ -64,6 +87,8 @@ def train(
         dataset_path (str): The path to the dataset.
         model_path (str): The path to the model.
         out_dir (str): The output directory.
+        plot_multi (bool): Plot multiple metrics.
+        plot_raw (bool): Plot the raw data.
     """
 
     df = load_dataset(dataset_path)
@@ -103,8 +128,12 @@ def train(
 
     model.save(out_dir)
 
-    metrics = Metrics.load(out_dir, n=2)
+    metrics = Metrics.load(out_dir, n=plot_n)
     metrics.insert(0, model.metrics)
     model.metrics.save(out_dir)
 
-    plot_metrics(metrics)
+    plot_metrics(
+        metrics,
+        plot_multi=plot_multi,
+        plot_raw=plot_raw
+    )

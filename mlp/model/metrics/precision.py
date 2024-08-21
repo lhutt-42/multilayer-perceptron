@@ -12,6 +12,15 @@ class PrecisionMetrics(Data):
     Class to store the precision metrics.
     """
 
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Initializes the precision metrics class.
+        """
+
+        super().__init__(*args, **kwargs)
+        self.name = 'Precision'
+
+
     # pylint: disable=arguments-differ
     def add_train(self, y_true: np.ndarray, y_pred: np.ndarray, **kwargs) -> None:
         """

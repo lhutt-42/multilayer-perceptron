@@ -4,6 +4,7 @@ This module contains the plotting logic.
 
 import sys
 from typing import List, Dict
+from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -18,6 +19,47 @@ class Plot:
     A class to plot the metrics of a model.
     """
 
+    PALETTES = [
+        {
+            'train': '#FFA500',
+            'test': '#FF6347'
+        },
+        {
+            'train': '#1E90FF',
+            'test': '#00BFFF'
+        },
+        {
+            'train': '#32CD32',
+            'test': '#3CB371'
+        },
+    ]
+
+
+
+    @dataclass
+    class Metrics:
+        """
+        A class to store the metrics.
+        """
+
+        name: str
+
+        train_raw: List[float]
+        test_raw: List[float]
+
+        train_smoothed: List[float]
+        test_smoothed: List[float]
+
+    @dataclass
+    class Palette:
+        """
+        A class to store the palette.
+        """
+
+        train: List[str]
+        test: List[str]
+
+
     def __init__(self, title: str = 'Metrics') -> None:
         """
         Initializes the plotter.
@@ -27,13 +69,11 @@ class Plot:
         """
 
         self.title = title
-        self.data: List[Dict] = []
-
-        self.train_palette: List[str] = []
-        self.test_palette: List[str] = []
+        self.metrics: Dict[str, List[Plot.Metrics]] = {}
+        self.palettes: Dict[str, Plot.Palette] = {}
 
 
-    def plot_data(self, data: Data) -> None:
+    def plot_data(self, metric: Data) -> None:
         """
         Stores the data for plotting later.
 
@@ -41,48 +81,62 @@ class Plot:
             data (Data): The data to plot.
         """
 
-        sigma = len(data.train_values) / 500
-        smoothed_train_values = gaussian_filter1d(data.train_values, sigma=sigma)
-        smoothed_test_values = gaussian_filter1d(data.test_values, sigma=sigma)
+        sigma = len(metric.train_values) / 100
+        metric = Plot.Metrics(
+            name=metric.name,
+            train_raw=metric.train_values,
+            test_raw=metric.test_values,
+            train_smoothed=gaussian_filter1d(metric.train_values, sigma=sigma),
+            test_smoothed=gaussian_filter1d(metric.test_values, sigma=sigma)
+        )
 
-        self.data.append({
-            'train': smoothed_train_values,
-            'test': smoothed_test_values,
-        })
+        if self.metrics.get(metric.name) is None:
+            self.metrics[metric.name] = []
+
+        self.metrics[metric.name].append(metric)
 
 
-    def render(self) -> None:
+    def render(self, raw: bool = False) -> None:
         """
         Renders the plot.
+
+        Args:
+            raw (bool): Whether to render the raw data.
         """
 
         fig, ax = plt.subplots(figsize=(10, 6))
         fig.canvas.manager.set_window_title(self.title)
+        ax.set_title(self.title)
 
-        self.train_palette = self.fading_palette(len(self.data), '#FF0000')
-        self.test_palette = self.fading_palette(len(self.data), '#0000FF')
-
-        for (i, data) in enumerate(self.data):
-            train_color = self.train_palette[i % len(self.train_palette)]
-            ax.plot(
-                data['train'],
-                label=f'{self.title} Train' if i == 0 else None,
-                color=train_color,
-                alpha=min(1.0, 1.0 - i / len(self.data) + 0.2),
-                linestyle=(0, (1, 2)) if i != 0 else None
+        for (i, (name, metrics)) in enumerate(self.metrics.items()):
+            self.palettes[name] = Plot.Palette(
+                train=Plot.fading_palette(len(metrics), Plot.PALETTES[i]['train']),
+                test=Plot.fading_palette(len(metrics), Plot.PALETTES[i]['test'])
             )
 
-            test_color = self.test_palette[i % len(self.test_palette)]
-            ax.plot(
-                data['test'],
-                label=f'{self.title} Test' if i == 0 else None,
-                color=test_color,
-                alpha=min(1.0, 1.0 - i / len(self.data) + 0.2),
-                linestyle=(0, (1, 2)) if i != 0 else None
-            )
+        for (name, metrics) in self.metrics.items():
+            for i, metric in enumerate(metrics):
+                train_color = self.palettes[name].train[i % len(self.palettes[name].train)]
+                ax.plot(
+                    raw and metric.train_raw or metric.train_smoothed,
+                    label=f'{metric.name} Train' if i == 0 else None,
+                    color=train_color,
+                    alpha=min(1.0, 1.0 - i / len(metrics) + 0.2),
+                    linestyle=(0, (1, 2)) if i != 0 else None
+                )
 
+                test_color = self.palettes[name].test[i % len(self.palettes[name].test)]
+                ax.plot(
+                    raw and metric.test_raw or metric.test_smoothed,
+                    label=f'{metric.name} Test' if i == 0 else None,
+                    color=test_color,
+                    alpha=min(1.0, 1.0 - i / len(metrics) + 0.2),
+                    linestyle=(0, (1, 2)) if i != 0 else None
+                )
+
+        if len(self.metrics) == 1:
+            ax.set_ylabel(self.title)
         ax.set_xlabel('Epochs')
-        ax.set_ylabel(self.title)
         ax.set_ylim(0, 1)
         ax.legend()
         ax.grid(True)
