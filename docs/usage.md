@@ -138,16 +138,23 @@ model = new Models.BatchModel {
 Once your environment is set up and your configuration file is ready, you can start training the MLP model.
 
 
+### Global Options
+
+```bash
+python mlp.py [--seed <seed_value>] <command>
+```
+
+* `--seed`: Set the seed value for all random number generators in the process. This ensures that your results are reproducible.
+
+
 ### Splitting the dataset
 
 Before training, you need to split your dataset into training and testing sets.
 Use the split command to accomplish this:
 
 ```bash
-python mlp.py --seed <seed> split <dataset> --test-size <ratio> --out-dir <directory>
+python mlp.py split <dataset> [--test-size <ratio>] [--out-dir <directory>]
 ```
-
-* `--seed`: Set the seed for reproducibility.
 
 * `dataset`: Path to the dataset.
 
@@ -161,10 +168,8 @@ python mlp.py --seed <seed> split <dataset> --test-size <ratio> --out-dir <direc
 Once the dataset is split, you can train the model using the train command:
 
 ```bash
-python mlp.py --seed <seed> train <dataset> <model> --out-dir <directory>
+python mlp.py train <dataset> <model> [--out-dir <directory>]
 ```
-
-* `--seed`: Set the seed for reproducibility.
 
 * `dataset`: Path to the training dataset.
 
@@ -182,10 +187,8 @@ At the end of the training, plots will be displayed showing the progress over ep
 After training, use the predict command to make predictions on new data:
 
 ```bash
-python mlp.py --seed <seed> train <dataset> <model>
+python mlp.py train <dataset> <model>
 ```
-
-* `--seed`: Set the seed for reproducibility.
 
 * `dataset`: Path to the testing dataset.
 
