@@ -34,7 +34,8 @@
         "mathbf",
         "mathcal",
         "backpropagation",
-        "overfitting"
+        "overfitting",
+        "venv"
     ],
     "ignoreWords": [],
     "import": []
