@@ -2,11 +2,11 @@
   <picture>
     <source
       media="(prefers-color-scheme: dark)"
-      srcset="assets/banner/mlp-dark.svg"
+      srcset="../assets/banner/mlp-dark.svg"
     >
     <img
       alt="multilayer-perceptron"
-      src="assets/banner/mlp-light.svg"
+      src="../assets/banner/mlp-light.svg"
       width="500"
     >
   </picture>
