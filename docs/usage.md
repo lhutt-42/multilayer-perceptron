@@ -81,7 +81,8 @@ import "pkl/model/Optimizers.pkl"
 import "pkl/model/Regularizers.pkl"
 import "pkl/model/Training.pkl"
 
-model = new Models.BatchModel {
+model = new Models.MiniBatchModel {
+    batch_size = 16
     epochs = 15000
     optimizer = new Optimizers.AdamOptimizer {
         learning_rate = 0.001
@@ -99,26 +100,15 @@ model = new Models.BatchModel {
             weight_initializer = new Initializers.XavierInitializer {}
             bias_initializer = new Initializers.ZeroInitializer {}
             regularizer = new Regularizers.L1Regularizer {}
+            optimizer = new Optimizers.GradientDescentOptimizer {
+                learning_rate = 0.001
+            }
         }
         new Layers.DenseLayer {
             layer_size = 18
-            activation = new Activations.SigmoidActivation {}
+            activation = new Activations.ReluActivation {}
             weight_initializer = new Initializers.XavierInitializer {}
-            bias_initializer = new Initializers.ZeroInitializer {}
-            regularizer = new Regularizers.L2Regularizer {}
-        }
-        new Layers.DenseLayer {
-            layer_size = 12
-            activation = new Activations.SigmoidActivation {}
-            weight_initializer = new Initializers.XavierInitializer {}
-            bias_initializer = new Initializers.ZeroInitializer {}
-            regularizer = new Regularizers.L2Regularizer {}
-        }
-        new Layers.DenseLayer {
-            layer_size = 6
-            activation = new Activations.SigmoidActivation {}
-            weight_initializer = new Initializers.XavierInitializer {}
-            bias_initializer = new Initializers.ZeroInitializer {}
+            bias_initializer = new Initializers.RandomInitializer {}
             regularizer = new Regularizers.L2Regularizer {}
         }
         new Layers.DenseLayer {
@@ -127,10 +117,14 @@ model = new Models.BatchModel {
             weight_initializer = new Initializers.HeInitializer {}
             bias_initializer = new Initializers.ZeroInitializer {}
             regularizer = null
+            gradient_clipping = 2.0
         }
     }
 }
 ```
+
+> [!WARNING]
+The example configuration above is intended to demonstrate various options and may not perform optimally.
 
 
 ## Usage
