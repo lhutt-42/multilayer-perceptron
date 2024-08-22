@@ -31,6 +31,7 @@ def main() -> None:
                 args.dataset,
                 args.model,
                 args.out_dir,
+                args.no_plot,
                 args.plot_n,
                 args.plot_multi,
                 args.plot_raw

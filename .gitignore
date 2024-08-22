@@ -4,6 +4,7 @@
 data/*
 !data/data.csv
 /models
+/seeds
 
 # VS Code settings
 .vscode/

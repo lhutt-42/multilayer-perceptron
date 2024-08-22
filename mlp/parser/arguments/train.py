@@ -33,6 +33,12 @@ def create_train_subparser(subparsers) -> None:
     )
 
     parser_train.add_argument(
+        '--no-plot',
+        action='store_true',
+        help='Does not display the plot.'
+    )
+
+    parser_train.add_argument(
         '--plot-n',
         type=int,
         default=2,

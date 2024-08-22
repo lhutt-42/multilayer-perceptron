@@ -67,6 +67,7 @@ def train(
     dataset_path: str,
     model_path: str,
     out_dir: str,
+    no_plot: bool,
     plot_n: int,
     plot_multi: bool,
     plot_raw: bool
@@ -118,6 +119,10 @@ def train(
     )
 
     model.save(out_dir)
+
+    if no_plot is True:
+        model.metrics.save(out_dir)
+        return
 
     metrics = Metrics.load(out_dir, n=plot_n)
     metrics.insert(0, model.metrics)
