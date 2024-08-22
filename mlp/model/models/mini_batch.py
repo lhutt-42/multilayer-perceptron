@@ -98,9 +98,6 @@ class MiniBatchModel(Model):
                 gradient = loss.backward(y_batch, train_output)
                 self.backward(gradient)
 
-                if self._should_stop(epoch, early_stopping):
-                    return
-
             train_output = self.forward(x_train)
             train_loss = self.loss.forward(y_train, train_output)
             self.metrics.add_train(y_true=y_train, y_pred=train_output, loss=train_loss)
@@ -108,6 +105,9 @@ class MiniBatchModel(Model):
             test_output = self.forward(x_test)
             test_loss = loss.forward(y_test, test_output)
             self.metrics.add_test(y_true=y_test, y_pred=test_output, loss=test_loss)
+
+            if self._should_stop(epoch, early_stopping):
+                return
 
             if epoch % 100 == 0:
                 self.metrics.log(epoch)
