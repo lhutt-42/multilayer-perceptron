@@ -3,11 +3,12 @@ This module contains the training logic for the model.
 """
 
 import sys
+from typing import Tuple
 
 from .logger import logger
 from .parser.file.dataset import load_dataset
 from .model.losses import BinaryCrossEntropyLoss
-from .model.metrics import AccuracyMetrics
+from .model.metrics import AccuracyMetrics, PrecisionMetrics
 from .model.models import Model
 from .model.preprocessing import binarize, normalize
 
@@ -16,7 +17,7 @@ from .model.preprocessing import binarize, normalize
 def predict(
     dataset_path: str,
     model_path: str,
-) -> None:
+) -> Tuple[float, float, float]:
     """
     Trains the model.
 
@@ -40,8 +41,13 @@ def predict(
     model = Model.load(model_path)
     y_pred = model.predict(x)
 
+    loss = BinaryCrossEntropyLoss.forward(y, y_pred)
+    logger.info('Model Loss: %.4f', loss)
+
     accuracy = AccuracyMetrics.calculate_accuracy(y, y_pred)
     logger.info('Model Accuracy: %.4f', accuracy)
 
-    loss = BinaryCrossEntropyLoss.forward(y, y_pred)
-    logger.info('Model Loss: %.4f', loss)
+    precision = PrecisionMetrics.calculate_precision(y, y_pred)
+    logger.info('Model Precision: %.4f', precision)
+
+    return loss, accuracy, precision
