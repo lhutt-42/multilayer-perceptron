@@ -168,7 +168,7 @@ python mlp.py split <dataset> [--test-size <ratio>] [--out-dir <directory>]
 Once the dataset is split, you can train the model using the train command:
 
 ```bash
-python mlp.py train <dataset> <model> [--out-dir <directory>] [--plot-n <n>] [--plot-multi] [--plot-raw]
+python mlp.py train <dataset> <model> [--out-dir <directory>] [--no-plot] [--plot-n <n>] [--plot-multi] [--plot-raw]
 ```
 
 * `dataset`: Path to the training dataset.
@@ -176,6 +176,8 @@ python mlp.py train <dataset> <model> [--out-dir <directory>] [--plot-n <n>] [--
 * `model`: Path to the model configuration file.
 
 * `--out-dir`: Path where the model and metrics will be saved.
+
+* `--no-plot`: Does not display plots.
 
 * `--plot-n`: Number of past metrics to plot.
 
