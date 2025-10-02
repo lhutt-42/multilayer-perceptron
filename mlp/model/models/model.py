@@ -13,10 +13,10 @@ from . import (
     Loss,
     Metrics,
     Optimizer,
-    BinaryCrossEntropyLoss,
+    CategoricalCrossEntropyLoss,
     EarlyStopping,
     save_model,
-    load_trained_model
+    load_trained_model,
 )
 
 
@@ -34,7 +34,6 @@ class Model:
         self.loss: Loss | None = None
         self.metrics: Metrics | None = None
 
-
     def add(self, layers: Layer | List[Layer]) -> None:
         """
         Adds one or multiple layer(s) to the model.
@@ -49,7 +48,6 @@ class Model:
             return
 
         self.layers.append(layers)
-
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         """
@@ -66,7 +64,6 @@ class Model:
             x = layer.forward(x)
         return x
 
-
     def backward(self, gradient: np.ndarray) -> None:
         """
         Computes the backward pass of the model.
@@ -78,12 +75,8 @@ class Model:
         for layer in reversed(self.layers):
             gradient = layer.backward(gradient)
 
-
     def initialize(
-        self,
-        input_size: int,
-        output_size: int,
-        optimizer: Optional[Optimizer] = None
+        self, input_size: int, output_size: int, optimizer: Optional[Optimizer] = None
     ) -> None:
         """
         Initializes the layers of the model.
@@ -98,14 +91,14 @@ class Model:
         self.output_size = output_size
 
         for i, layer in enumerate(self.layers):
-            if i == 0 and layer.layer_size != 'input':
+            if i == 0 and layer.layer_size != "input":
                 layer.initialize(input_size)
 
             match layer.layer_size:
-                case 'input':
+                case "input":
                     layer.layer_size = input_size
                     layer.initialize(input_size)
-                case 'output':
+                case "output":
                     layer.layer_size = output_size
                     layer.initialize(self.layers[i - 1].layer_size)
                 case _:
@@ -114,7 +107,6 @@ class Model:
 
             if optimizer is not None and layer.optimizer is None:
                 layer.optimizer = deepcopy(optimizer)
-
 
     def _should_stop(self, epoch: int, early_stopping: Optional[EarlyStopping]) -> bool:
         """
@@ -137,7 +129,7 @@ class Model:
 
         early_stopping.restore_weights(self.layers)
         self.metrics.log(epoch)
-        logger.info('Early stopping the model at epoch %d.', epoch)
+        logger.info("Early stopping the model at epoch %d.", epoch)
 
         return True
 
@@ -150,10 +142,10 @@ class Model:
         y_test: np.ndarray,
         epochs: int,
         *args,
-        loss: Loss = BinaryCrossEntropyLoss,
+        loss: Loss = CategoricalCrossEntropyLoss,
         early_stopping: Optional[EarlyStopping] = None,
-        **kwargs
-     ) -> None:
+        **kwargs,
+    ) -> None:
         """
         Trains the model.
 
@@ -169,7 +161,6 @@ class Model:
 
         raise NotImplementedError
 
-
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
         Predicts the target data.
@@ -183,7 +174,6 @@ class Model:
 
         return self.forward(x)
 
-
     def save(self, directory: str) -> None:
         """
         Saves the model to a file.
@@ -193,7 +183,6 @@ class Model:
         """
 
         save_model(self, directory)
-
 
     @staticmethod
     def load(path: str) -> None:

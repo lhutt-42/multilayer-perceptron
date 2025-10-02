@@ -26,17 +26,19 @@ class SoftmaxActivation(Activation):
         exp_values = np.exp(x - np.max(x, axis=1, keepdims=True))
         return exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
-
     def gradient(self, x: np.ndarray) -> np.ndarray:
         """
         Computes the gradient of the softmax function.
 
+        When used with categorical cross-entropy, the gradient simplifies
+        to the identity function (gradient is passed through as-is).
+
         Args:
-            x (np.ndarray): The input.
+            x (np.ndarray): The input (softmax output).
 
         Returns:
-            np.ndarray: The output.
+            np.ndarray: The gradient (passed through).
         """
 
-        s = self(x)
-        return s * (1 - s)
+        # For softmax + categorical cross-entropy, gradient is just passed through
+        return np.ones_like(x)

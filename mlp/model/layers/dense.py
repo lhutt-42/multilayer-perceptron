@@ -18,15 +18,12 @@ class DenseLayer(Layer):
         """
 
         if self.weights is None or self.biases is None:
-            raise ValueError('Layer not initialized.')
+            raise ValueError("Layer not initialized.")
 
         self.input = x
-        self.output = self.activation(
-            np.dot(x, self.weights) + self.biases
-        )
+        self.output = self.activation(np.dot(x, self.weights) + self.biases)
 
         return self.output
-
 
     def backward(self, gradient: np.ndarray) -> np.ndarray:
         """

@@ -16,12 +16,7 @@ class GradientDescentOptimizer(Optimizer):
     """
 
     # pylint: disable=unused-argument
-    def __init__(
-        self,
-        *args,
-        learning_rate: float = 0.001,
-        **kwargs
-    ) -> None:
+    def __init__(self, *args, learning_rate: float = 0.001, **kwargs) -> None:
         """
         Initializes the optimizer.
 
@@ -32,13 +27,12 @@ class GradientDescentOptimizer(Optimizer):
         super().__init__()
         self.learning_rate = learning_rate
 
-
     def update(
         self,
         weights: np.ndarray,
         biases: np.ndarray,
         weights_gradient: np.ndarray,
-        biases_gradient: np.ndarray
+        biases_gradient: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Updates the weights and biases using gradient descent.

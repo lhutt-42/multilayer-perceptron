@@ -7,12 +7,7 @@ from typing import Optional
 import numpy as np
 
 from . import logger
-from . import (
-    Loss,
-    Metrics,
-    BinaryCrossEntropyLoss,
-    EarlyStopping
-)
+from . import Loss, Metrics, CategoricalCrossEntropyLoss, EarlyStopping
 from .model import Model
 
 
@@ -31,10 +26,10 @@ class BatchModel(Model):
         y_test: np.ndarray,
         epochs: int,
         *args,
-        loss: Loss = BinaryCrossEntropyLoss,
+        loss: Loss = CategoricalCrossEntropyLoss,
         early_stopping: Optional[EarlyStopping] = None,
-        **kwargs
-     ) -> None:
+        **kwargs,
+    ) -> None:
         """
         Trains the model.
 
@@ -49,9 +44,9 @@ class BatchModel(Model):
         """
 
         if self.input_size is None or self.output_size is None:
-            raise ValueError('The model must be initialized before training.')
+            raise ValueError("The model must be initialized before training.")
 
-        logger.info('Training the model using batch training.')
+        logger.info("Training the model using batch training.")
 
         self.loss = loss
         self.metrics = Metrics()
@@ -74,4 +69,4 @@ class BatchModel(Model):
             if epoch % 1000 == 0:
                 self.metrics.log(epoch)
 
-        logger.info('Finished training the model.')
+        logger.info("Finished training the model.")

@@ -27,20 +27,18 @@ class SigmoidActivation(Activation):
         return np.where(
             x_clipped >= 0,
             1 / (1 + np.exp(-x_clipped)),
-            np.exp(x_clipped) / (1 + np.exp(x_clipped))
+            np.exp(x_clipped) / (1 + np.exp(x_clipped)),
         )
-
 
     def gradient(self, x: np.ndarray) -> np.ndarray:
         """
         Computes the gradient of the sigmoid function.
 
         Args:
-            x (np.ndarray): The input.
+            x (np.ndarray): The sigmoid output (not input).
 
         Returns:
-            np.ndarray: The output.
+            np.ndarray: The gradient.
         """
 
-        s = self(x)
-        return s * (1 - s)
+        return x * (1 - x)

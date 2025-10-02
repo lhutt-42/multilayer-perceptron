@@ -8,7 +8,7 @@ import numpy as np
 
 from .optimizer import Optimizer
 
-EPSILON: float = 1e-7 # Used to avoid numerical instability.
+EPSILON: float = 1e-7  # Used to avoid numerical instability.
 
 
 # pylint: disable=too-few-public-methods,too-many-instance-attributes
@@ -24,7 +24,7 @@ class AdamOptimizer(Optimizer):
         learning_rate: float = 0.001,
         beta1: float = 0.9,
         beta2: float = 0.999,
-        **kwargs
+        **kwargs,
     ) -> None:
         """
         Initializes the optimizer.
@@ -50,7 +50,7 @@ class AdamOptimizer(Optimizer):
         weights: np.ndarray,
         biases: np.ndarray,
         weights_gradient: np.ndarray,
-        biases_gradient: np.ndarray
+        biases_gradient: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Updates the weights and biases using gradient descent.
@@ -78,16 +78,16 @@ class AdamOptimizer(Optimizer):
         self.m_b = self.beta1 * self.m_b + (1 - self.beta1) * biases_gradient
 
         # Update biased second raw moment estimate
-        self.v_w = self.beta2 * self.v_w + (1 - self.beta2) * (weights_gradient ** 2)
-        self.v_b = self.beta2 * self.v_b + (1 - self.beta2) * (biases_gradient ** 2)
+        self.v_w = self.beta2 * self.v_w + (1 - self.beta2) * (weights_gradient**2)
+        self.v_b = self.beta2 * self.v_b + (1 - self.beta2) * (biases_gradient**2)
 
         # Compute bias-corrected first moment estimate
-        m_w_hat = self.m_w / (1 - self.beta1 ** self.t)
-        m_b_hat = self.m_b / (1 - self.beta1 ** self.t)
+        m_w_hat = self.m_w / (1 - self.beta1**self.t)
+        m_b_hat = self.m_b / (1 - self.beta1**self.t)
 
         # Compute bias-corrected second raw moment estimate
-        v_w_hat = self.v_w / (1 - self.beta2 ** self.t)
-        v_b_hat = self.v_b / (1 - self.beta2 ** self.t)
+        v_w_hat = self.v_w / (1 - self.beta2**self.t)
+        v_b_hat = self.v_b / (1 - self.beta2**self.t)
 
         weights -= self.learning_rate * m_w_hat / (np.sqrt(v_w_hat) + EPSILON)
         biases -= self.learning_rate * m_b_hat / (np.sqrt(v_b_hat) + EPSILON)

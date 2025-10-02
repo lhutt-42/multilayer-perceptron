@@ -7,12 +7,7 @@ from typing import Optional, Iterator, Generator, List, Any
 import numpy as np
 
 from . import logger
-from . import (
-    Loss,
-    Metrics,
-    BinaryCrossEntropyLoss,
-    EarlyStopping
-)
+from . import Loss, Metrics, CategoricalCrossEntropyLoss, EarlyStopping
 from .model import Model
 
 
@@ -24,8 +19,7 @@ class MiniBatchModel(Model):
 
     @staticmethod
     def batched(
-        iterable: Iterator[Any],
-        batch_size: int
+        iterable: Iterator[Any], batch_size: int
     ) -> Generator[List[Any], None, None]:
         """
         Custom generator that yields batches of a specified size.
@@ -47,7 +41,6 @@ class MiniBatchModel(Model):
         if batch:
             yield batch
 
-
     # pylint: disable=too-many-arguments, arguments-differ, too-many-locals
     def fit(
         self,
@@ -57,11 +50,11 @@ class MiniBatchModel(Model):
         y_test: np.ndarray,
         epochs: int,
         *args,
-        loss: Loss = BinaryCrossEntropyLoss,
+        loss: Loss = CategoricalCrossEntropyLoss,
         early_stopping: Optional[EarlyStopping] = None,
         batch_size: int = 32,
-        **kwargs
-     ) -> None:
+        **kwargs,
+    ) -> None:
         """
         Trains the model.
 
@@ -77,15 +70,19 @@ class MiniBatchModel(Model):
         """
 
         if self.input_size is None or self.output_size is None:
-            raise ValueError('The model must be initialized before training.')
+            raise ValueError("The model must be initialized before training.")
 
-        logger.info('Training the model using mini-batch training.')
+        logger.info("Training the model using mini-batch training.")
 
         self.loss = loss
         self.metrics = Metrics()
 
         for epoch in range(epochs):
-            batch_zip = zip(x_train, y_train)
+            indices = np.random.permutation(len(x_train))
+            x_train_shuffled = x_train[indices]
+            y_train_shuffled = y_train[indices]
+
+            batch_zip = zip(x_train_shuffled, y_train_shuffled)
             batch_cycle = self.batched(batch_zip, batch_size)
 
             for batch in batch_cycle:
@@ -109,7 +106,6 @@ class MiniBatchModel(Model):
             if self._should_stop(epoch, early_stopping):
                 return
 
-            if epoch % 100 == 0:
-                self.metrics.log(epoch)
+            self.metrics.log(epoch)
 
-        logger.info('Finished training the model.')
+        logger.info("Finished training the model.")

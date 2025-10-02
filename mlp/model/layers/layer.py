@@ -6,13 +6,7 @@ from typing import Optional
 
 import numpy as np
 
-from . import (
-    Activation,
-    Optimizer,
-    Initializer,
-    ZeroInitializer,
-    Regularizer
-)
+from . import Activation, Optimizer, Initializer, ZeroInitializer, Regularizer
 
 
 # pylint: disable=too-many-instance-attributes
@@ -31,10 +25,10 @@ class Layer:
         bias_initializer: Initializer = ZeroInitializer(),
         optimizer: Optional[Optimizer] = None,
         regularizer: Optional[Regularizer] = None,
-        gradient_clipping: Optional[float] = 1.0,
+        gradient_clipping: Optional[float] = 10.0,
         weights: Optional[np.ndarray] = None,
         biases: Optional[np.ndarray] = None,
-        **kwargs
+        **kwargs,
     ) -> None:
         """
         Initializes the layer.
@@ -67,7 +61,6 @@ class Layer:
         self.input: np.ndarray = np.array([])
         self.output: np.ndarray = np.array([])
 
-
     def initialize(self, input_size: int) -> None:
         """
         Initializes the layer.
@@ -79,7 +72,6 @@ class Layer:
         self.weights = self.weight_initializer((input_size, self.layer_size))
         self.biases = self.bias_initializer((1, self.layer_size))
 
-
     def clip(self, gradient_clipping: float) -> None:
         """
         Clips the gradients.
@@ -88,17 +80,15 @@ class Layer:
             gradient_clipping (float): The gradient clipping value.
         """
 
-        self.weights_gradient = np.clip(
-            self.weights_gradient,
-            -gradient_clipping,
-            gradient_clipping,
-        )
-        self.biases_gradient = np.clip(
-            self.biases_gradient,
-            -gradient_clipping,
-            gradient_clipping,
-        )
+        # Use gradient norm clipping instead of element-wise clipping
+        weights_norm = np.linalg.norm(self.weights_gradient)
+        biases_norm = np.linalg.norm(self.biases_gradient)
 
+        if weights_norm > gradient_clipping:
+            self.weights_gradient *= gradient_clipping / weights_norm
+
+        if biases_norm > gradient_clipping:
+            self.biases_gradient *= gradient_clipping / biases_norm
 
     def optimize(self, optimizer: Optimizer) -> None:
         """
@@ -109,12 +99,8 @@ class Layer:
         """
 
         self.weights, self.biases = optimizer.update(
-            self.weights,
-            self.biases,
-            self.weights_gradient,
-            self.biases_gradient
+            self.weights, self.biases, self.weights_gradient, self.biases_gradient
         )
-
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         """
@@ -128,7 +114,6 @@ class Layer:
         """
 
         raise NotImplementedError
-
 
     def backward(self, gradient: np.ndarray) -> np.ndarray:
         """
