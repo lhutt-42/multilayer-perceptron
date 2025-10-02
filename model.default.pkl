@@ -1,0 +1,47 @@
+amends "pkl/AppConfig.pkl"
+
+import "pkl/model/Activations.pkl"
+import "pkl/model/Initializers.pkl"
+import "pkl/model/Layers.pkl"
+import "pkl/model/Models.pkl"
+import "pkl/model/Optimizers.pkl"
+import "pkl/model/Regularizers.pkl"
+import "pkl/model/Training.pkl"
+
+model = new Models.MiniBatchModel {
+    epochs = 100
+    batch_size = 8
+    optimizer = new Optimizers.AdamOptimizer {
+        learning_rate = 0.001
+    }
+    early_stopping = new Training.EarlyStopping {
+        patience = 10
+        delta = 0.0
+    }
+    layers {
+        new Layers.DenseLayer {
+            layer_size = "input"
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = 24
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = 24
+            activation = new Activations.SigmoidActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+        }
+        new Layers.DenseLayer {
+            layer_size = "output"
+            activation = new Activations.SoftmaxActivation {}
+            weight_initializer = new Initializers.XavierInitializer {}
+            bias_initializer = new Initializers.ZeroInitializer {}
+        }
+    }
+}

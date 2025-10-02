@@ -8,8 +8,6 @@ import "pkl/model/Optimizers.pkl"
 import "pkl/model/Regularizers.pkl"
 import "pkl/model/Training.pkl"
 
-
-// seed: 314
 model = new Models.BatchModel {
     epochs = 15000
     optimizer = new Optimizers.AdamOptimizer {

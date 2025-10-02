@@ -15,40 +15,44 @@
 </h1>
 
 
-This guide provides step-by-step instructions for installing, configuring, and using the multilayer-perceptron.\
-Follow these steps to set up your environment, customize your model, and run training and prediction tasks.
+This guide provides step-by-step instructions for installing, configuring, and using the multilayer-perceptron using modern Python tooling.
 
 
 ## Installation
 
-Before you can run the multilayer perceptron (MLP) model, ensure that you have all the necessary dependencies installed.
-Follow the steps below to set up your environment:
+### Prerequisites
+
+- Python 3.10 or higher
+- [uv](https://docs.astral.sh/uv/) - A fast Python package installer and resolver (recommended)
+- Git
 
 
-### 1. Clone the Repository:
+### Quick Setup with uv (Recommended)
+
+[uv](https://docs.astral.sh/uv/) is a blazingly fast Python package installer and resolver written in Rust. It's 10-100x faster than pip and provides better dependency resolution.
+
+#### 1. Install uv
+
+```bash
+# macOS and Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or using pip
+pip install uv
+```
+
+#### 2. Clone and Setup
 
 ```bash
 git clone https://github.com/lucas-ht/multilayer-perceptron.git
 cd multilayer-perceptron
+uv sync
 ```
 
-
-### 2. Set Up a Virtual Environment:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-
-### 3. Install the Required Packages:
-
-Ensure that you have all necessary Python packages installed.
-You can install them via pip:
-
-```bash
-pip install -r requirements.txt
-```
+That's it! All dependencies will be installed in a managed virtual environment.
 
 
 ## Configuration
@@ -129,71 +133,101 @@ The example configuration above is intended to demonstrate various options and m
 
 ## Usage
 
-Once your environment is set up and your configuration file is ready, you can start training the MLP model.
+Once your environment is set up and your configuration file is ready, you can start using the MLP.
+
+> **Note**: If using `uv`, prefix all commands with `uv run`. If using a traditional virtual environment, activate it first with `source venv/bin/activate`.
 
 
 ### Global Options
 
 ```bash
-python mlp.py [--seed <seed_value>] <command>
+# With uv
+uv run mlp.py [--seed <seed_value>] <command>
 ```
 
-* `--seed`: Set the seed value for all random number generators in the process. This ensures that your results are reproducible.
+* `--seed`: Set the seed value for all random number generators. Ensures reproducible results.
 
 
-### Splitting the dataset
+### Splitting the Dataset
 
-Before training, you need to split your dataset into training and testing sets.
-Use the split command to accomplish this:
+Before training, split your dataset into training and testing sets:
 
 ```bash
-python mlp.py split <dataset> [--test-size <ratio>] [--out-dir <directory>]
+# With uv
+uv run mlp.py split <dataset> [--test-size <ratio>] [--out-dir <directory>]
 ```
 
-* `dataset`: Path to the dataset.
+**Arguments:**
+* `dataset`: Path to the dataset CSV file
+* `--test-size`: Test set ratio (default: 0.2 for 80/20 split)
+* `--out-dir`: Output directory (default: `./data`)
 
-* `--test-size`: Ratio of the dataset to use for testing (e.g., 0.1 for 90% training data and 10% testing data).
-
-* `--out-dir`: Path where the training set will be saved.
+**Example:**
+```bash
+uv run mlp.py split data/data.csv --test-size 0.2 --out-dir ./data
+```
 
 
 ### Training
 
-Once the dataset is split, you can train the model using the train command:
+Train the model with your configuration:
 
 ```bash
-python mlp.py train <dataset> <model> [--out-dir <directory>] [--no-plot] [--plot-n <n>] [--plot-multi] [--plot-raw]
+# With uv
+uv run mlp.py train <dataset> <model> [options]
+
 ```
 
-* `dataset`: Path to the training dataset.
+**Arguments:**
+* `dataset`: Path to the training dataset
+* `model`: Path to the model configuration `.pkl` file
 
-* `model`: Path to the model configuration file.
+**Options:**
+* `--out-dir <directory>`: Where to save the trained model (default: `./models`)
+* `--no-plot`: Skip displaying plots after training
+* `--plot-n <n>`: Number of past training runs to overlay in plots (default: 2)
+* `--plot-raw`: Display raw metrics instead of smoothed curves
 
-* `--out-dir`: Path where the model and metrics will be saved.
+**Example:**
+```bash
+uv run mlp.py train ./data/train.csv ./model.test.pkl --plot-raw
+```
 
-* `--no-plot`: Does not display plots.
+**Training Output:**
 
-* `--plot-n`: Number of past metrics to plot.
+During training, you'll see real-time metrics:
+```
+INFO: epoch 0 - train loss: 0.655 - test loss: 0.656 - train accuracy: 0.633 - test accuracy: 0.631
+```
 
-* `--plot-multi`: Plot multiple metrics.
-
-* `--plot-raw`: Plot the raw data.
-
-During training, the script will output relevant metrics such as loss and accuracy to monitor progress.\
-If early stopping is configured, the training will stop when the improvement in validation loss is below the specified threshold for a set number of epochs.\
-At the end of the training, plots will be displayed showing the progress over epochs.
+After training completes (unless `--no-plot` is used), a visualization window displays:
+- **Grid layout**: 2×3 subplots showing all metrics
+- **Color-coded**: Each metric has a unique color palette
+- **Metrics tracked**: Loss, Accuracy, Precision, Recall, F1 Score
+- **Train/Test split**: Each metric shows both training and validation curves
 
 
 ### Making Predictions
 
-After training, use the predict command to make predictions on new data:
+Evaluate the trained model on test data:
 
 ```bash
-python mlp.py train <dataset> <model>
+# With uv
+uv run mlp.py predict <dataset> <model>
 ```
 
-* `dataset`: Path to the testing dataset.
+**Arguments:**
+* `dataset`: Path to the test dataset
+* `model`: Path to the trained model JSON file (saved after training)
 
-* `model`: Path to the model configuration file.
+**Example:**
+```bash
+uv run mlp.py predict ./data/test.csv ./models/model.json
+```
 
-This script will load the trained model, run predictions on the test data, and display the loss and accuracy of the model.
+**Output:**
+```
+INFO: Model Loss: 0.6117
+INFO: Model Accuracy: 0.5789
+INFO: Model Precision: 0.0000
+```
