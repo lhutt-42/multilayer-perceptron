@@ -36,6 +36,14 @@ def save_metrics(metrics: Metrics, directory: str) -> None:
         'precision': {
             'train': metrics.precision.train_values,
             'test': metrics.precision.test_values
+        },
+        'recall': {
+            'train': metrics.recall.train_values,
+            'test': metrics.recall.test_values
+        },
+        'f1_score': {
+            'train': metrics.f1_score.train_values,
+            'test': metrics.f1_score.test_values
         }
     }
 

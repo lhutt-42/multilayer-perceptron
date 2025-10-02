@@ -63,7 +63,9 @@ def _load_metric(path: str) -> Metrics:
         Metrics,
         LossMetrics,
         AccuracyMetrics,
-        PrecisionMetrics
+        PrecisionMetrics,
+        RecallMetrics,
+        F1ScoreMetrics
     )
 
     try:
@@ -83,6 +85,14 @@ def _load_metric(path: str) -> Metrics:
                 precision=PrecisionMetrics(
                     train_values=data['precision']['train'],
                     test_values=data['precision']['test']
+                ),
+                recall=RecallMetrics(
+                    train_values=data['recall']['train'],
+                    test_values=data['recall']['test']
+                ),
+                f1_score=F1ScoreMetrics(
+                    train_values=data['f1_score']['train'],
+                    test_values=data['f1_score']['test']
                 )
             )
 
