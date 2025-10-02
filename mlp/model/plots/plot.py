@@ -70,7 +70,9 @@ class Plot:
             data (Data): The data to plot.
         """
 
-        sigma = len(metric.train_values) / 100
+        n_epochs = len(metric.train_values)
+        sigma = max(1.0, n_epochs / 100)
+
         metric = Plot.Metrics(
             name=metric.name,
             train_raw=metric.train_values,
