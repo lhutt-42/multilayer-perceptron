@@ -27,12 +27,6 @@
         alt="Pkl"
       >
     </picture>
-    <picture>
-      <img
-        src="https://github.com/lucas-ht/multilayer-perceptron/actions/workflows/test.yaml/badge.svg"
-        alt="Test Status"
-      >
-    </picture>
 </p>
 
 
@@ -45,7 +39,6 @@ This project implements a simple **Multilayer Perceptron (MLP)**, a fundamental 
 - [Installation & Usage](#installation--usage)
 - [Quick Start](#quick-start)
 - [Architecture](#architecture)
-- [Subject](#subject)
 - [Acknowledgements](#acknowledgements)
 
 
