@@ -11,11 +11,15 @@ from .metrics import Metrics
 from .loss import LossMetrics
 from .accuracy import AccuracyMetrics
 from .precision import PrecisionMetrics
+from .recall import RecallMetrics
+from .f1_score import F1ScoreMetrics
 
 __all__ = [
-    'Data',
-    'Metrics',
-    'LossMetrics',
-    'AccuracyMetrics',
-    'PrecisionMetrics'
+    "Data",
+    "Metrics",
+    "LossMetrics",
+    "AccuracyMetrics",
+    "PrecisionMetrics",
+    "RecallMetrics",
+    "F1ScoreMetrics",
 ]
