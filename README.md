@@ -252,11 +252,6 @@ $` \text{if } \left\|\nabla_{\theta} \mathcal{L} \right\|_2 > \text{clip\_value}
 Gradient clipping improves the stability of the training process, particularly in deep networks where the risk of exploding gradients is higher.
 
 
-## Subject
-
-[The subject can be found here.](/assets/subject.pdf)
-
-
 ## Acknowledgements
 
 This project is part of the 42 School curriculum. Special thanks to the 42 School community for their support and resources.
