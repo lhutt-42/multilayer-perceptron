@@ -20,27 +20,20 @@ def main() -> None:
         np.random.seed(args.seed)
 
     match args.command:
-        case 'split':
-            split(
-                args.dataset,
-                args.test_size,
-                args.out_dir
-            )
-        case 'train':
+        case "split":
+            split(args.dataset, args.test_size, args.out_dir)
+        case "train":
             train(
                 args.dataset,
                 args.model,
                 args.out_dir,
                 args.no_plot,
                 args.plot_n,
-                args.plot_multi,
-                args.plot_raw
+                args.plot_raw,
             )
-        case 'predict':
-            predict(
-                args.dataset,
-                args.model
-            )
+        case "predict":
+            predict(args.dataset, args.model)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
