@@ -1,0 +1,16 @@
+[project]
+name = "multilayer-perceptron"
+version = "1.0.0"
+description = "Implementation of a multilayer perceptron for classification tasks"
+readme = "README.md"
+requires-python = ">=3.10.12"
+dependencies = [
+    "colorama>=0.4.6",
+    "matplotlib>=3.10.6",
+    "numpy>=2.2.6",
+    "pandas>=2.3.3",
+    "pkl-python>=0.1.16",
+    "requests>=2.32.5",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.15.3",
+]
