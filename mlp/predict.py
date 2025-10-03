@@ -7,7 +7,7 @@ from typing import Tuple
 
 from .logger import logger
 from .parser.file.dataset import load_dataset
-from .model.losses import CategoricalCrossEntropyLoss
+from .model.losses import BinaryCrossEntropyLoss
 from .model.metrics import AccuracyMetrics, PrecisionMetrics, RecallMetrics, F1ScoreMetrics
 from .model.models import Model
 from .model.preprocessing import binarize, normalize
@@ -41,7 +41,7 @@ def predict(
     model = Model.load(model_path)
     y_pred = model.predict(x)
 
-    loss = CategoricalCrossEntropyLoss.forward(y, y_pred)
+    loss = BinaryCrossEntropyLoss.forward(y, y_pred)
     logger.info("Model Loss: %.4f", loss)
 
     accuracy = AccuracyMetrics.calculate_accuracy(y, y_pred)
